@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { Poppins } from 'next/font/google'
+import Header from './components/Header'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,9 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.variable}>
-        <main className=" relative overflow-hidden">{children}</main>
-        <Navbar />
-        <Footer />
+        <Header />
+        <div className="flex h-screen w-full flex-col">
+          <Navbar />
+          <main className=" relative overflow-hidden">{children}</main>
+        </div>
+        {/* <Footer /> */}
       </body>
     </html>
   )
