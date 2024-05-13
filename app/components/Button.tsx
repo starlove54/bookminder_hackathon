@@ -1,28 +1,19 @@
 import React from 'react'
 
 type ButtonProps = {
-  type?: 'button' | 'submit'
-  border?: string
-  size: string
-  color?: string
+  type?: 'submit' | 'button'
   className: string
-  variant: string
-  children: React.ReactNode // Include children prop
+  color?: string
+  children: React.ReactNode
 }
 
-const Button = ({
+const Button: React.FC<ButtonProps> = ({
   type,
   className,
   color,
-  size,
-  variant,
   children,
-}: ButtonProps) => {
-  return (
-    <button className={`${className} ${size} ${color} ${variant}`}>
-      {children}
-    </button>
-  )
+}) => {
+  return <button className={`${className} text-${color} `}>{children}</button>
 }
 
 export default Button

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import BookIcon from '../components/BookIcon'
 import Card from '../components/Card'
+import Plus from '../components/Plus'
 
 export default function Home() {
   return (
@@ -103,6 +104,7 @@ export default function Home() {
                   <Card title={`sajja tatta`} description={`bunty bondu`} />
                   <Card title={`khabba tatta`} description={`bunty bondu`} />
                   <Card title={`sajja tatta`} description={`bunty bondu`} />
+                  <Plus />
                   {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
               <CardHeader>
                 <img

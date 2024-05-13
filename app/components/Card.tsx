@@ -25,7 +25,7 @@ const Card = ({ title, description }) => {
           width="80"
         />
       </div> */}
-      <div className="card-content">
+      <div className="card-content px-4 py-4 shadow-md">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
           {title}
         </h3>
@@ -35,17 +35,15 @@ const Card = ({ title, description }) => {
         <div className="mt-4 flex items-center gap-2">
           <Button
             type="button"
-            className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-            size="sm"
-            variant="outline"
+            className="text-gray-500 hover:bg-gray-100  border-gray-500 dark:text-gray-400 rounded-full dark:hover:bg-gray-800 
+            text-slate-500  px-5 py-2 border-2 border-solid"
           >
             Edit
           </Button>
           <Button
-            className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+            className=" hover:bg-gray-100 dark:text-gray-400 rounded-full dark:hover:bg-gray-800 px-5 py-2 
+            text-white bg-red-500 border-none text-md"
             color="red"
-            size="sm"
-            variant="outline"
           >
             Delete
           </Button>
