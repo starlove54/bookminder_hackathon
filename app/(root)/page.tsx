@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import BookIcon from '../components/BookIcon'
+import Card from '../components/Card'
 
 export default function Home() {
   return (
@@ -97,6 +98,11 @@ export default function Home() {
                   Characters
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  <Card title={`sajja tatta`} description={`bunty bondu`} />
+                  <Card title={`khabba tatta`} description={`bunty bondu`} />
+                  <Card title={`sajja tatta`} description={`bunty bondu`} />
+                  <Card title={`khabba tatta`} description={`bunty bondu`} />
+                  <Card title={`sajja tatta`} description={`bunty bondu`} />
                   {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
               <CardHeader>
                 <img

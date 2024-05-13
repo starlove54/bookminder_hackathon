@@ -1,18 +1,27 @@
 import React from 'react'
 
+type ButtonProps = {
+  type?: 'button' | 'submit'
+  border?: string
+  size: string
+  color?: string
+  className: string
+  variant: string
+  children: React.ReactNode // Include children prop
+}
+
 const Button = ({
-  className = '',
-  color = 'gray',
-  size = 'md',
-  variant = 'solid',
-  // onClick,
-  // children,
-}) => {
+  type,
+  className,
+  color,
+  size,
+  variant,
+  children,
+}: ButtonProps) => {
   return (
-    <button
-      className={`${className} ${color} ${size} ${variant}`}
-      // onClick={onClick}
-    ></button>
+    <button className={`${className} ${size} ${color} ${variant}`}>
+      {children}
+    </button>
   )
 }
 
