@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "To Kill a Mockingbird",
+    "characters": {
+      "title": "Atticus Finch",
+      "description": "A lawyer in Maycomb. Father to Scout and Jem. Known for his integrity and sense of justice."
+    }
+  },
+  {
+    "id": 2,
+    "title": "Harry Potter and the Philosopher's Stone ",
+    "characters": {
+      "title": "Harry Potter",
+      "description": "The main protagonist, a young wizard who discovers his magical heritage on his eleventh birthday."
+    }
+  },
+  {
+    "id": 3,
+    "title": "The Great Gatsby",
+    "characters": {
+      "title": "Jay Gatsby",
+      "description": "A mysterious millionaire known for his extravagant parties. Obsessed with Daisy Buchanan."
+    }
+  }
+]

@@ -1,46 +1,46 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import BookIcon from '../components/BookIcon'
 import Card from '../components/Card'
 import Plus from '../components/Plus'
+import { useState } from 'react'
+import bookItems from '../bookItems.json'
 
 export default function Home() {
+  const [books, setNumberBook] = useState(bookItems)
+  const [selectedBook, setSelectedBook] = useState(1)
+
+  const readBook = (id: Number) => {
+    setSelectedBook((prev) => id)
+  }
+
   return (
     <main>
       <div className="flex flex-1 overflow-hidden">
         <div className="hidden border-r bg-gray-50/40 lg:block dark:bg-gray-800/40">
-          <div className="flex h-full max-h-screen flex-col gap-2">
-            <div className="flex h-[60px] items-center border-b px-6 bg-white shadow-sm dark:bg-gray-950">
-              <Link
-                className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-50"
-                href="#"
-              >
-                <span className="">My Books</span>
-              </Link>
+          <div className="flex h-full max-h-screen flex-col  gap-4">
+            <div className="flex text-center h-[60px] items-center border-b px-6 bg-white shadow-sm dark:bg-gray-950">
+              <div className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-50">
+                <span className="text-md">My Stories</span>
+              </div>
             </div>
-            <div className="flex-1 overflow-auto py-2">
-              <div className="grid items-start px-4 text-sm font-medium">
-                <Link
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-                  href="#"
-                >
-                  <BookIcon />
-                  Book 1
-                </Link>
-                <Link
-                  className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                  href="#"
-                >
-                  <BookIcon />
-                  Book 2
-                </Link>
-                <Link
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-                  href="#"
-                >
-                  <BookIcon />
-                  Book 3
-                </Link>
+
+            <div className="flex-1  overflow-auto py-2 max-w-[350px] truncate  ">
+              <div className="grid items-start px-4 font-medium ">
+                {books.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg  dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50  "
+                    onClick={() => readBook(item.id)}
+                  >
+                    <span>
+                      <BookIcon />
+                    </span>
+                    {item.title}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -48,8 +48,8 @@ export default function Home() {
         <div className="flex flex-1 flex-col">
           <div className="flex h-16 items-center justify-between border-b bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40">
             <div className="flex items-center gap-4">
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                Book 2
+              <h1 className="text-3xl font-semibold text-gray-500 dark:text-gray-50">
+                {books.find((item) => item.id === selectedBook)?.title}
               </h1>
               {/* <NavigationMenu>
           <NavigationMenuList>
@@ -104,158 +104,11 @@ export default function Home() {
                   <Card title={`khabba tatta`} description={`bunty bondu`} />
                   <Card title={`sajja tatta`} description={`bunty bondu`} />
                   <Plus />
-                  {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
-              <CardHeader>
-                <img
-                  alt="Character Image"
-                  className="aspect-square rounded-md object-cover"
-                  height="80"
-                  src="/placeholder.svg"
-                  width="80"
-                />
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                  Frodo Baggins
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  The main protagonist of the story, a hobbit who embarks on a
-                  quest to destroy the One Ring.
-                </p>
-                <div className="mt-4 flex items-center gap-2">
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    color="red"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-                  {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
-              <CardHeader>
-                <img
-                  alt="Character Image"
-                  className="aspect-square rounded-md object-cover"
-                  height="80"
-                  src="/placeholder.svg"
-                  width="80"
-                />
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                  Gandalf the Grey
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  A powerful wizard who guides and protects Frodo on his
-                  journey.
-                </p>
-                <div className="mt-4 flex items-center gap-2">
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    color="red"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-                  {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
-              <CardHeader>
-                <img
-                  alt="Character Image"
-                  className="aspect-square rounded-md object-cover"
-                  height="80"
-                  src="/placeholder.svg"
-                  width="80"
-                />
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                  Aragorn
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  A ranger and the heir to the throne of Gondor, who joins the
-                  fellowship on their quest.
-                </p>
-                <div className="mt-4 flex items-center gap-2">
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    color="red"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-                  {/* <Card className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
-              <CardHeader>
-                <img
-                  alt="Character Image"
-                  className="aspect-square rounded-md object-cover"
-                  height="80"
-                  src="/placeholder.svg"
-                  width="80"
-                />
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-                  Legolas
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  An elven archer who joins the fellowship on their quest.
-                </p>
-                <div className="mt-4 flex items-center gap-2">
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    color="red"
-                    size="sm"
-                    variant="outline"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
                 </div>
               </div>
               <div className="grid gap-4">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
-                  Storyline
+                  StoryPoints
                 </h2>
                 <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
                   <div className="grid gap-1 text-sm relative">
