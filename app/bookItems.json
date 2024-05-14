@@ -2,25 +2,100 @@
   {
     "id": 1,
     "title": "To Kill a Mockingbird",
-    "characters": {
-      "title": "Atticus Finch",
-      "description": "A lawyer in Maycomb. Father to Scout and Jem. Known for his integrity and sense of justice."
-    }
+    "characters": [
+      {
+        "id": 1,
+        "title": "Atticus Finch",
+        "description": "A lawyer in Maycomb. Father to Scout and Jem. Known for his integrity and sense of justice."
+      },
+      {
+        "id": 2,
+        "title": "Scout Finch",
+        "description": "The daughter of Atticus Finch. Known for her curiosity and innocence."
+      },
+      {
+        "id": 3,
+        "title": "Jem Finch",
+        "description": "The son of Atticus Finch and older brother to Scout. Mature and protective."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": 1,
+        "title": "Tom Robinson's Trial",
+        "description": "A pivotal moment in the story where Atticus defends Tom Robinson, a black man accused of raping a white woman, highlighting racial injustice."
+      },
+      {
+        "id": 2,
+        "title": "Boo Radley's Revelation",
+        "description": "The discovery that Boo Radley, a reclusive neighbor, has been secretly looking out for Scout and Jem, challenging their preconceived notions."
+      }
+    ]
   },
   {
     "id": 2,
-    "title": "Harry Potter and the Philosopher's Stone ",
-    "characters": {
-      "title": "Harry Potter",
-      "description": "The main protagonist, a young wizard who discovers his magical heritage on his eleventh birthday."
-    }
+    "title": "Harry Potter and the Philosopher's Stone",
+    "characters": [
+      {
+        "id": 1,
+        "title": "Harry Potter",
+        "description": "The main protagonist, a young wizard who discovers his magical heritage on his eleventh birthday."
+      },
+      {
+        "id": 2,
+        "title": "Hermione Granger",
+        "description": "Harry's intelligent and resourceful friend, known for her extensive knowledge of magic."
+      },
+      {
+        "id": 3,
+        "title": "Ron Weasley",
+        "description": "Harry's loyal and brave best friend, coming from a large family of wizards."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": 1,
+        "title": "The Philosopher's Stone",
+        "description": "Harry's quest to prevent Voldemort from obtaining the Philosopher's Stone, a powerful magical artifact."
+      },
+      {
+        "id": 2,
+        "title": "Quidditch Match",
+        "description": "Harry's first experience playing Quidditch, showcasing his talent and bravery."
+      }
+    ]
   },
   {
     "id": 3,
     "title": "The Great Gatsby",
-    "characters": {
-      "title": "Jay Gatsby",
-      "description": "A mysterious millionaire known for his extravagant parties. Obsessed with Daisy Buchanan."
-    }
+    "characters": [
+      {
+        "id": 1,
+        "title": "Jay Gatsby",
+        "description": "A mysterious millionaire known for his extravagant parties. Obsessed with Daisy Buchanan."
+      },
+      {
+        "id": 2,
+        "title": "Daisy Buchanan",
+        "description": "Gatsby's former lover, married to Tom Buchanan. Symbolizes wealth and the American Dream."
+      },
+      {
+        "id": 3,
+        "title": "Nick Carraway",
+        "description": "The narrator of the story, a young man from the Midwest who becomes involved with Gatsby's circle."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": 1,
+        "title": "Gatsby's Extravagant Parties",
+        "description": "Gatsby's lavish parties that serve as a backdrop for the story's themes of excess and superficiality."
+      },
+      {
+        "id": 2,
+        "title": "Myrtle's Death",
+        "description": "The tragic death of Myrtle Wilson, which sets off a chain of events leading to Gatsby's downfall."
+      }
+    ]
   }
 ]

@@ -1,7 +1,4 @@
 'use client'
-
-import Image from 'next/image'
-import Link from 'next/link'
 import BookIcon from '../components/BookIcon'
 import Card from '../components/Card'
 import Plus from '../components/Plus'
@@ -10,10 +7,10 @@ import bookItems from '../bookItems.json'
 
 export default function Home() {
   const [books, setNumberBook] = useState(bookItems)
-  const [selectedBook, setSelectedBook] = useState(1)
+  const [selectedBookId, setSelectedBookId] = useState(1)
 
   const readBook = (id: Number) => {
-    setSelectedBook((prev) => id)
+    setSelectedBookId((prev) => id)
   }
 
   return (
@@ -48,8 +45,8 @@ export default function Home() {
         <div className="flex flex-1 flex-col">
           <div className="flex h-16 items-center justify-between border-b bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40">
             <div className="flex items-center gap-4">
-              <h1 className="text-3xl font-semibold text-gray-500 dark:text-gray-50">
-                {books.find((item) => item.id === selectedBook)?.title}
+              <h1 className="text-3xl font-semibold text-gray-600 dark:text-gray-50">
+                {books.find((item) => item.id === selectedBookId)?.title}
               </h1>
               {/* <NavigationMenu>
           <NavigationMenuList>
@@ -80,46 +77,49 @@ export default function Home() {
           </NavigationMenuList>
         </NavigationMenu> */}
             </div>
-            <div className="flex items-center gap-2">
-              {/* <Button
-          className="h-8 w-8 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-          size="icon"
-          variant="outline"
-        >
-          <PlusIcon className="h-4 w-4" />
-          <span className="sr-only">Add New</span>
-        </Button> */}
-            </div>
+            <div className="flex items-center gap-2"></div>
           </div>
           <div className="flex-1 overflow-auto p-6">
             <div className="grid gap-6">
               <div className="grid gap-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
+                <h2 className="text-2xl font-semibold text-gray-500  dark:text-gray-50">
                   Characters
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                  <Card title={`sajja tatta`} description={`bunty bondu`} />
-                  <Card title={`khabba tatta`} description={`bunty bondu`} />
-                  <Card title={`sajja tatta`} description={`bunty bondu`} />
-                  <Card title={`khabba tatta`} description={`bunty bondu`} />
-                  <Card title={`sajja tatta`} description={`bunty bondu`} />
+                  {books
+                    .find((item) => item.id === selectedBookId)
+                    ?.characters.map((item) => (
+                      <Card
+                        key={item.id}
+                        title={item.title}
+                        description={item.description}
+                      />
+                    ))}
                   <Plus />
                 </div>
               </div>
-              <div className="grid gap-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
+              <div className="grid gap-6 py-8">
+                <h2 className="text-2xl  font-semibold text-gray-500 dark:text-gray-50">
                   StoryPoints
                 </h2>
                 <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
-                  <div className="grid gap-1 text-sm relative">
+                  <div className="grid gap-4 text-sm relative">
                     <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />
-                    <div className="font-medium">The Fellowship Formed</div>
-                    <div className="text-gray-500 dark:text-gray-400">
-                      The main characters, including Frodo, Gandalf, Aragorn,
-                      and Legolas, come together to form the Fellowship of the
-                      Ring and embark on a quest to destroy the One Ring and
-                      defeat the dark lord Sauron.
-                    </div>
+                    {books
+                      .find((item) => item.id === selectedBookId)
+                      ?.storypoints.map((item) => (
+                        <>
+                          <div key={item.id} className="font-medium">
+                            {item.title}{' '}
+                          </div>
+                          <div
+                            key={item.id}
+                            className="text-gray-500 dark:text-gray-400"
+                          >
+                            {item.description}{' '}
+                          </div>
+                        </>
+                      ))}
                   </div>
                   <div className="grid gap-1 text-sm relative">
                     <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />

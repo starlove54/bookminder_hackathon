@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({ title, description }) => {
         />
       </div> */}
       <div className="card-content px-4 py-4 shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
+        <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-50">
           {title}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400">
