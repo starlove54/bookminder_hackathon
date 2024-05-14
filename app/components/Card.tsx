@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from './Button'
+import CardButton from './CardButton'
 import Image from 'next/image'
 
 // interface CardProps {
@@ -9,11 +9,11 @@ import Image from 'next/image'
 // }
 
 type CardProps = {
-  title?: string
-  desciption?: string
+  title: string
+  description: string
 }
 
-const Card = ({ title, description }) => {
+const Card: React.FC<CardProps> = ({ title, description }) => {
   return (
     <div className="bg-white shadow-sm hover:shadow-lg transition-shadow dark:bg-gray-950">
       {/* <div className="card-header">
@@ -33,20 +33,16 @@ const Card = ({ title, description }) => {
           {description}
         </p>
         <div className="mt-4 flex items-center gap-2">
-          <Button
+          <CardButton
             type="button"
-            className="text-gray-500 hover:bg-gray-100  border-gray-500 dark:text-gray-400 rounded-full dark:hover:bg-gray-800 
-            text-slate-500  px-5 py-2 border-2 border-solid"
+            className=" hover:bg-slate-200   rounded-full  
+            text-slate-500 text-sm  px-5 py-2 border-2 transition-transform transform hover:scale-105"
           >
             Edit
-          </Button>
-          <Button
-            className=" hover:bg-gray-100 dark:text-gray-400 rounded-full dark:hover:bg-gray-800 px-5 py-2 
-            text-white bg-red-500 border-none text-md"
-            color="red"
-          >
+          </CardButton>
+          <CardButton className="hover:bg-red-400 rounded-full px-5 py-2 text-white bg-red-500 text-sm transition-transform transform hover:scale-105">
             Delete
-          </Button>
+          </CardButton>
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
 import React from 'react'
 
-type ButtonProps = {
+type CardButtonProps = {
   type?: 'submit' | 'button'
   className: string
   color?: string
   children: React.ReactNode
 }
 
-const Button: React.FC<ButtonProps> = ({
+const CardButton: React.FC<CardButtonProps> = ({
   type,
   className,
   color,
@@ -16,4 +16,4 @@ const Button: React.FC<ButtonProps> = ({
   return <button className={`${className} text-${color} `}>{children}</button>
 }
 
-export default Button
+export default CardButton

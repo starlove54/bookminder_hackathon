@@ -15,7 +15,6 @@ export default function Home() {
                 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-50"
                 href="#"
               >
-                {/* <BookIcon className="h-6 w-6" /> */}
                 <span className="">My Books</span>
               </Link>
             </div>
@@ -25,21 +24,21 @@ export default function Home() {
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
                   href="#"
                 >
-                  <BookIcon className="h-4 w-4" />
+                  <BookIcon />
                   Book 1
                 </Link>
                 <Link
                   className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700 dark:hover:text-gray-50"
                   href="#"
                 >
-                  <BookIcon className="h-4 w-4" />
+                  <BookIcon />
                   Book 2
                 </Link>
                 <Link
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
                   href="#"
                 >
-                  <BookIcon className="h-4 w-4" />
+                  <BookIcon />
                   Book 3
                 </Link>
               </div>
