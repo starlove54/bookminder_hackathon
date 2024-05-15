@@ -1,11 +1,11 @@
 'use client'
-import BookIcon from '../components/BookIcon'
-import Card from '../components/Card'
-import Plus from '../components/Plus'
+import Card from '../Components/Card'
+import Plus from '../Components/Plus'
 import { useState } from 'react'
 import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@radix-ui/react-separator'
+import { highlightText } from '../Utilities/HighlightText'
 
 type Character = {
   id: string
@@ -29,6 +29,7 @@ type Book = {
 export default function Home() {
   const [books, setBook] = useState<Book[]>(bookItems)
   const [selectedBookId, setSelectedBookId] = useState('1')
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const readBook = (id: string) => {
     setSelectedBookId(id)
@@ -79,41 +80,70 @@ export default function Home() {
     setBook(updatedBooks)
   }
 
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchQuery(event.target.value)
+  }
+
+  const filteredBooks = books.filter((book) =>
+    book.title
+      .replace(/\s/g, '')
+      .toLowerCase()
+      .includes(searchQuery.replace(/\s/g, '').toLowerCase())
+  )
+
   return (
     <main>
-      <div className="flex flex-1 overflow-hidden ">
-        <div className=" border-r max-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
-          <div className="flex h-full max-h-screen flex-col gap-6">
-            {/* my stories  */}
-            <div className="flex  h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="border-r min-w-[230px] max-w-[230px] sm:min-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
+          <div className="flex h-full max-h-screen flex-col gap-6  sm:min-w-[350px]">
+            {/* Search input */}
+            <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950">
               <div className="flex items-center gap-2 text-2xl font-semibold text-gray-600 dark:text-gray-50">
                 <span className="text-md">My Stories</span>
               </div>
             </div>
-
-            <div className="flex-1  overflow-auto py-2 gap-4    ">
-              <div className="px-4 font-medium  ">
-                <div className="max-w-[280px] ">
-                  <Input />
+            <div className="flex-1 overflow-auto py-2 gap-4">
+              <div className="px-4 font-medium">
+                <div className="max-w-[280px]">
+                  <Input
+                    value={searchQuery}
+                    onChange={handleSearchInputChange}
+                  />
                 </div>
-                <div className="flex flex-col gap-1 py-6 ">
-                  {books.map((item, index) => (
-                    <>
-                      {index >= 1 && (
-                        <Separator
-                          className="border-t border-gray-200  "
-                          orientation="horizontal"
-                        />
-                      )}
+                <div className="flex flex-col gap-1 py-6">
+                  {/* Render filtered books while being searched in search box */}
+                  {searchQuery.length >= 1 &&
+                    filteredBooks.map((item, index) => (
                       <div
                         key={item.id}
-                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg  dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer "
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer"
                         onClick={() => readBook(item.id)}
                       >
-                        {item.title}
+                        {/* {item.title} */}
+                        {highlightText(item.title, searchQuery)}
                       </div>
-                    </>
-                  ))}
+                    ))}
+                  {/* Original book list */}
+                  {searchQuery.length === 0 &&
+                    books.map((item, index) => (
+                      <>
+                        {index >= 1 && (
+                          <Separator
+                            className="border-t border-gray-200"
+                            orientation="horizontal"
+                          />
+                        )}
+                        <div
+                          key={item.id}
+                          className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer"
+                          onClick={() => readBook(item.id)}
+                        >
+                          {item.title}
+                        </div>
+                      </>
+                    ))}
                 </div>
               </div>
             </div>

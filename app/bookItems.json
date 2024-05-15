@@ -97,5 +97,104 @@
         "description": "The tragic death of Myrtle Wilson, which sets off a chain of events leading to Gatsby's downfall."
       }
     ]
+  },
+  {
+    "id": "4",
+    "title": "Pride and Prejudice",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Elizabeth Bennet",
+        "description": "The protagonist, known for her intelligence and independence."
+      },
+      {
+        "id": "2",
+        "title": "Mr. Darcy",
+        "description": "A wealthy gentleman with a reputation for being proud and aloof."
+      },
+      {
+        "id": "3",
+        "title": "Jane Bennet",
+        "description": "Elizabeth's eldest sister, gentle and kind-hearted."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Netherfield Ball",
+        "description": "A significant event where Elizabeth and Mr. Darcy's relationship begins to change."
+      },
+      {
+        "id": "2",
+        "title": "Lydia's Elopement",
+        "description": "The scandalous elopement of Elizabeth's sister, which threatens the family's reputation."
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "title": "1984",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Winston Smith",
+        "description": "The protagonist, a disillusioned citizen living under a totalitarian regime."
+      },
+      {
+        "id": "2",
+        "title": "Julia",
+        "description": "Winston's lover, who shares his disdain for the oppressive government."
+      },
+      {
+        "id": "3",
+        "title": "Big Brother",
+        "description": "The symbolic figurehead of the Party, representing absolute authority and surveillance."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Thought Police",
+        "description": "The government's secret police force that monitors and punishes dissenting thoughts."
+      },
+      {
+        "id": "2",
+        "title": "Room 101",
+        "description": "A torture chamber where individuals are subjected to their worst fears, used for psychological manipulation."
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "title": "The Catcher in the Rye",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Holden Caulfield",
+        "description": "The disillusioned teenage protagonist, struggling with the phoniness of the adult world."
+      },
+      {
+        "id": "2",
+        "title": "Phoebe Caulfield",
+        "description": "Holden's younger sister, whom he adores for her innocence."
+      },
+      {
+        "id": "3",
+        "title": "Mr. Antolini",
+        "description": "Holden's former teacher, who offers him guidance and support."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Pencey Prep",
+        "description": "The boarding school from which Holden is expelled, reflecting his feelings of alienation and disconnection."
+      },
+      {
+        "id": "2",
+        "title": "Holden's Red Hunting Cap",
+        "description": "A symbolic item representing Holden's desire to protect innocence and individuality."
+      }
+    ]
   }
 ]
