@@ -4,40 +4,117 @@ import Card from '../components/Card'
 import Plus from '../components/Plus'
 import { useState } from 'react'
 import bookItems from '../bookItems.json'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@radix-ui/react-separator'
+
+type Character = {
+  id: string
+  title: string
+  description: string
+}
+
+type StoryPoint = {
+  id: string
+  title: string
+  description: string
+}
+
+type Book = {
+  id: string
+  title: string
+  characters: Character[]
+  storypoints: StoryPoint[]
+}
 
 export default function Home() {
-  const [books, setNumberBook] = useState(bookItems)
-  const [selectedBookId, setSelectedBookId] = useState(1)
+  const [books, setBook] = useState<Book[]>(bookItems)
+  const [selectedBookId, setSelectedBookId] = useState('1')
 
-  const readBook = (id: Number) => {
-    setSelectedBookId((prev) => id)
+  const readBook = (id: string) => {
+    setSelectedBookId(id)
+  }
+  const addCharacter = () => {
+    // Find the book with the selected ID
+    const selectedBook = books.find((item) => item.id === selectedBookId)
+
+    if (selectedBook) {
+      // Create a new character object
+      const newCharacter = {
+        id: crypto.randomUUID(),
+        title: 'New character title',
+        description: 'Add the description for the new character',
+      }
+
+      // Create a new array with the updated characters
+      const updatedCharacters = [...selectedBook.characters, newCharacter]
+
+      // Update the book with the new characters array
+      const updatedBooks = books.map((book) => {
+        if (book.id === selectedBookId) {
+          console.log(selectedBook.characters)
+          return {
+            ...book,
+            characters: updatedCharacters,
+          }
+        }
+        return book
+      })
+      // Update the state with the updated books array
+      setBook(updatedBooks)
+    }
+  }
+
+  const removeCharacter = (bookId: string, characterCardKey: string) => {
+    const updatedBooks = books.map((book) => {
+      if (book.id === bookId) {
+        return {
+          ...book,
+          characters: book.characters.filter(
+            (character) => character.id !== characterCardKey
+          ),
+        }
+      }
+      return book
+    })
+    setBook(updatedBooks)
   }
 
   return (
     <main>
-      <div className="flex flex-1 overflow-hidden">
-        <div className="hidden border-r bg-gray-50/40 lg:block dark:bg-gray-800/40">
-          <div className="flex h-full max-h-screen flex-col  gap-4">
-            <div className="flex text-center h-[60px] items-center border-b px-6 bg-white shadow-sm dark:bg-gray-950">
-              <div className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-50">
+      <div className="flex flex-1 overflow-hidden ">
+        <div className=" border-r max-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
+          <div className="flex h-full max-h-screen flex-col gap-6">
+            {/* my stories  */}
+            <div className="flex  h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950">
+              <div className="flex items-center gap-2 text-2xl font-semibold text-gray-600 dark:text-gray-50">
                 <span className="text-md">My Stories</span>
               </div>
             </div>
 
-            <div className="flex-1  overflow-auto py-2 max-w-[350px] truncate  ">
-              <div className="grid items-start px-4 font-medium ">
-                {books.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg  dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50  "
-                    onClick={() => readBook(item.id)}
-                  >
-                    <span>
-                      <BookIcon />
-                    </span>
-                    {item.title}
-                  </div>
-                ))}
+            <div className="flex-1  overflow-auto py-2 gap-4    ">
+              <div className="px-4 font-medium  ">
+                <div className="max-w-[280px] ">
+                  <Input />
+                </div>
+                <div className="flex flex-col gap-1 py-6 ">
+                  {books.map((item, index) => (
+                    <>
+                      {index >= 1 && (
+                        <Separator
+                          className="border-t border-gray-200  "
+                          orientation="horizontal"
+                        />
+                      )}
+                      <div
+                        key={item.id}
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg  dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer "
+                        onClick={() => readBook(item.id)}
+                      >
+                        {item.title}
+                      </div>
+                    </>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -48,34 +125,6 @@ export default function Home() {
               <h1 className="text-3xl font-semibold text-gray-600 dark:text-gray-50">
                 {books.find((item) => item.id === selectedBookId)?.title}
               </h1>
-              {/* <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-                href="#"
-              >
-                Library
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-                href="#"
-              >
-                Characters
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-                href="#"
-              >
-                Storyline
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu> */}
             </div>
             <div className="flex items-center gap-2"></div>
           </div>
@@ -88,14 +137,17 @@ export default function Home() {
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {books
                     .find((item) => item.id === selectedBookId)
-                    ?.characters.map((item) => (
+                    ?.characters.map((character) => (
                       <Card
-                        key={item.id}
-                        title={item.title}
-                        description={item.description}
+                        key={character.id}
+                        characterCardKey={character.id}
+                        title={character.title}
+                        description={character.description}
+                        bookId={selectedBookId}
+                        onDelete={removeCharacter}
                       />
                     ))}
-                  <Plus />
+                  <Plus onClick={() => addCharacter()} />
                 </div>
               </div>
               <div className="grid gap-6 py-8">

@@ -1,8 +1,9 @@
 import React from 'react'
 
-const Plus = () => {
+const Plus = ({ onClick }) => {
   return (
     <svg
+      onClick={onClick}
       className="flex justify-center size-32 opacity-50"
       // {...props}
       xmlns="http://www.w3.org/2000/svg"

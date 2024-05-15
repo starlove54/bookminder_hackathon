@@ -5,6 +5,7 @@ type CardButtonProps = {
   className: string
   color?: string
   children: React.ReactNode
+  onClick?: () => void
 }
 
 const CardButton: React.FC<CardButtonProps> = ({
@@ -12,8 +13,13 @@ const CardButton: React.FC<CardButtonProps> = ({
   className,
   color,
   children,
+  onClick,
 }) => {
-  return <button className={`${className} text-${color} `}>{children}</button>
+  return (
+    <button className={`${className} text-${color} `} onClick={onClick}>
+      {children}
+    </button>
+  )
 }
 
 export default CardButton
