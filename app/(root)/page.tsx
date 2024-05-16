@@ -6,6 +6,7 @@ import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@radix-ui/react-separator'
 import { highlightText } from '../Utilities/HighlightText'
+import { Button } from '@/components/ui/button'
 
 type Character = {
   id: string
@@ -30,6 +31,8 @@ export default function Home() {
   const [books, setBook] = useState<Book[]>(bookItems)
   const [selectedBookId, setSelectedBookId] = useState('1')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [newBookTitle, setNewBookTitle] = useState<string>('')
+  const [addNewStory, setAddNewStory] = useState(false)
 
   const readBook = (id: string) => {
     setSelectedBookId(id)
@@ -93,26 +96,83 @@ export default function Home() {
       .includes(searchQuery.replace(/\s/g, '').toLowerCase())
   )
 
+  const addNewBook = () => {
+    if (newBookTitle.trim() === '') {
+      setAddNewStory(false)
+      return // Prevent adding empty title
+    }
+
+    const newBook: Book = {
+      // Create new book object
+      id: crypto.randomUUID(),
+      title: newBookTitle,
+      characters: [],
+      storypoints: [],
+    }
+
+    const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+    setBook(updatedBooks) // Update books state
+
+    // Reset input field
+    setNewBookTitle('')
+  }
+
+  const handleAddNewStory = () => {
+    setAddNewStory((prev) => !prev)
+  }
+
   return (
     <main>
       <div className="flex flex-1 overflow-hidden">
         <div className="border-r min-w-[230px] max-w-[230px] sm:min-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
-          <div className="flex h-full max-h-screen flex-col gap-6  sm:min-w-[350px]">
+          <div className="flex h-full max-h-screen flex-col   sm:min-w-[350px] ">
             {/* Search input */}
-            <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950">
-              <div className="flex items-center gap-2 text-2xl font-semibold text-gray-600 dark:text-gray-50">
-                <span className="text-md">My Stories</span>
-              </div>
-            </div>
-            <div className="flex-1 overflow-auto py-2 gap-4">
-              <div className="px-4 font-medium">
-                <div className="max-w-[280px]">
+            <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950 ">
+              <div className="flex items-center gap-2  font-semibold text-gray-600 dark:text-gray-50">
+                <span className="text-lg">My Stories</span>
+                <div className="flex justify-center max-w-[300px]">
                   <Input
                     value={searchQuery}
                     onChange={handleSearchInputChange}
+                    className="h-8 font-small"
                   />
                 </div>
-                <div className="flex flex-col gap-1 py-6">
+              </div>
+            </div>
+            <div className="flex-1 overflow-auto  gap-4 ">
+              <div className="px-4   ">
+                <div className="flex justify-center pb-1 pt-3  ">
+                  <Button
+                    className="add-new-story-buton h-8  text-gray-500 transition hover:scale-105"
+                    variant="outline"
+                    onClick={handleAddNewStory}
+                  >
+                    {addNewStory ? 'Add later' : 'New Story'}
+                  </Button>
+                </div>
+                <div className="flex flex-col gap-1 ">
+                  {/* adding new title */}
+                  <div className="flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500">
+                    {addNewStory && (
+                      <>
+                        <Input
+                          type="text"
+                          className="h-8"
+                          placeholder="Enter new story title..."
+                          value={newBookTitle}
+                          onChange={(e) => setNewBookTitle(e.target.value)}
+                        />
+                        <Button
+                          className="text-gray-600 hover:text-gray-900 h-8  transition hover:scale-105"
+                          onClick={addNewBook}
+                          variant="outline"
+                        >
+                          Add story
+                        </Button>
+                      </>
+                    )}
+                  </div>
+
                   {/* Render filtered books while being searched in search box */}
                   {searchQuery.length >= 1 &&
                     filteredBooks.map((item, index) => (
