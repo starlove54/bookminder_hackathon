@@ -1,0 +1,200 @@
+[
+  {
+    "id": "1",
+    "title": "To Kill a Mockingbird",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Atticus Finch",
+        "description": "A lawyer in Maycomb. Father to Scout and Jem. Known for his integrity and sense of justice."
+      },
+      {
+        "id": "2",
+        "title": "Scout Finch",
+        "description": "The daughter of Atticus Finch. Known for her curiosity and innocence."
+      },
+      {
+        "id": "3",
+        "title": "Jem Finch",
+        "description": "The son of Atticus Finch and older brother to Scout. Mature and protective."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Tom Robinson's Trial",
+        "description": "A pivotal moment in the story where Atticus defends Tom Robinson, a black man accused of raping a white woman, highlighting racial injustice."
+      },
+      {
+        "id": "2",
+        "title": "Boo Radley's Revelation",
+        "description": "The discovery that Boo Radley, a reclusive neighbor, has been secretly looking out for Scout and Jem, challenging their preconceived notions."
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Harry Potter and the Philosopher's stone",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Harry Potter",
+        "description": "The main protagonist, a young wizard who discovers his magical heritage on his eleventh birthday."
+      },
+      {
+        "id": "2",
+        "title": "Hermione Granger",
+        "description": "Harry's intelligent and resourceful friend, known for her extensive knowledge of magic."
+      },
+      {
+        "id": "3",
+        "title": "Ron Weasley",
+        "description": "Harry's loyal and brave best friend, coming from a large family of wizards."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "The Philosopher's Stone",
+        "description": "Harry's quest to prevent Voldemort from obtaining the Philosopher's Stone, a powerful magical artifact."
+      },
+      {
+        "id": "2",
+        "title": "Quidditch Match",
+        "description": "Harry's first experience playing Quidditch, showcasing his talent and bravery."
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "title": "The Great Gatsby",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Jay Gatsby",
+        "description": "A mysterious millionaire known for his extravagant parties. Obsessed with Daisy Buchanan."
+      },
+      {
+        "id": "2",
+        "title": "Daisy Buchanan",
+        "description": "Gatsby's former lover, married to Tom Buchanan. Symbolizes wealth and the American Dream."
+      },
+      {
+        "id": "3",
+        "title": "Nick Carraway",
+        "description": "The narrator of the story, a young man from the Midwest who becomes involved with Gatsby's circle."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Gatsby's Extravagant Parties",
+        "description": "Gatsby's lavish parties that serve as a backdrop for the story's themes of excess and superficiality."
+      },
+      {
+        "id": "2",
+        "title": "Myrtle's Death",
+        "description": "The tragic death of Myrtle Wilson, which sets off a chain of events leading to Gatsby's downfall."
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "title": "Pride and Prejudice",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Elizabeth Bennet",
+        "description": "The protagonist, known for her intelligence and independence."
+      },
+      {
+        "id": "2",
+        "title": "Mr. Darcy",
+        "description": "A wealthy gentleman with a reputation for being proud and aloof."
+      },
+      {
+        "id": "3",
+        "title": "Jane Bennet",
+        "description": "Elizabeth's eldest sister, gentle and kind-hearted."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Netherfield Ball",
+        "description": "A significant event where Elizabeth and Mr. Darcy's relationship begins to change."
+      },
+      {
+        "id": "2",
+        "title": "Lydia's Elopement",
+        "description": "The scandalous elopement of Elizabeth's sister, which threatens the family's reputation."
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "title": "1984",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Winston Smith",
+        "description": "The protagonist, a disillusioned citizen living under a totalitarian regime."
+      },
+      {
+        "id": "2",
+        "title": "Julia",
+        "description": "Winston's lover, who shares his disdain for the oppressive government."
+      },
+      {
+        "id": "3",
+        "title": "Big Brother",
+        "description": "The symbolic figurehead of the Party, representing absolute authority and surveillance."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Thought Police",
+        "description": "The government's secret police force that monitors and punishes dissenting thoughts."
+      },
+      {
+        "id": "2",
+        "title": "Room 101",
+        "description": "A torture chamber where individuals are subjected to their worst fears, used for psychological manipulation."
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "title": "The Catcher in the Rye",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Holden Caulfield",
+        "description": "The disillusioned teenage protagonist, struggling with the phoniness of the adult world."
+      },
+      {
+        "id": "2",
+        "title": "Phoebe Caulfield",
+        "description": "Holden's younger sister, whom he adores for her innocence."
+      },
+      {
+        "id": "3",
+        "title": "Mr. Antolini",
+        "description": "Holden's former teacher, who offers him guidance and support."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Pencey Prep",
+        "description": "The boarding school from which Holden is expelled, reflecting his feelings of alienation and disconnection."
+      },
+      {
+        "id": "2",
+        "title": "Holden's Red Hunting Cap",
+        "description": "A symbolic item representing Holden's desire to protect innocence and individuality."
+      }
+    ]
+  }
+]
