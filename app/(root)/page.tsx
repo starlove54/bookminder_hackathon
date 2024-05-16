@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@radix-ui/react-separator'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
+import { Edit, Trash2Icon } from 'lucide-react'
 
 type Character = {
   id: string
@@ -121,6 +122,12 @@ export default function Home() {
     setAddNewStory((prev) => !prev)
   }
 
+  const deleteBook = (bookId: string) => {
+    const updatedBooks = books.filter((item) => item.id !== bookId)
+    console.log(updatedBooks)
+    setBook(updatedBooks)
+  }
+
   return (
     <main>
       <div className="flex flex-1 overflow-hidden">
@@ -139,20 +146,20 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-auto  gap-4 ">
-              <div className="px-4   ">
+            <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4 ">
+              <div className="left-panel text-wrap whitespace-normal  px-4   ">
                 <div className="flex justify-center pb-1 pt-3  ">
                   <Button
-                    className="add-new-story-buton h-8  text-gray-500 transition hover:scale-105"
+                    className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
                     variant="outline"
                     onClick={handleAddNewStory}
                   >
                     {addNewStory ? 'Add later' : 'New Story'}
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 ">
+                <div className="stories-panel text-wrap whitespace-normal  flex flex-col  gap-1   ">
                   {/* adding new title */}
-                  <div className="flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500">
+                  <div className="flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500 ">
                     {addNewStory && (
                       <>
                         <Input
@@ -160,7 +167,12 @@ export default function Home() {
                           className="h-8"
                           placeholder="Enter new story title..."
                           value={newBookTitle}
-                          onChange={(e) => setNewBookTitle(e.target.value)}
+                          onChange={(e) => {
+                            if (e.target.value.length <= 50) {
+                              // Set your desired character limit, e.g., 50
+                              setNewBookTitle(e.target.value)
+                            }
+                          }}
                         />
                         <Button
                           className="text-gray-600 hover:text-gray-900 h-8  transition hover:scale-105"
@@ -195,12 +207,23 @@ export default function Home() {
                             orientation="horizontal"
                           />
                         )}
-                        <div
-                          key={item.id}
-                          className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer"
-                          onClick={() => readBook(item.id)}
-                        >
-                          {item.title}
+                        <div className="flex flex-row justify-start items-center gap-2 ">
+                          <div
+                            key={item.id}
+                            className="flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  "
+                            onClick={() => readBook(item.id)}
+                          >
+                            {item.title}
+                          </div>
+                          <div className="ml-auto">
+                            <span className="flex flex-row gap-6 ">
+                              <Edit className="w-4 h-4 opacity-55 hover:opacity-100" />
+                              <Trash2Icon
+                                className="w-4 h-4 opacity-55 hover:opacity-100"
+                                onClick={() => deleteBook(item.id)}
+                              />
+                            </span>
+                          </div>
                         </div>
                       </>
                     ))}
