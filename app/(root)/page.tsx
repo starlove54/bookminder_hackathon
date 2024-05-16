@@ -8,6 +8,16 @@ import { Separator } from '@radix-ui/react-separator'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
 import { Edit, Trash2Icon } from 'lucide-react'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 type Character = {
   id: string
@@ -124,7 +134,6 @@ export default function Home() {
 
   const deleteBook = (bookId: string) => {
     const updatedBooks = books.filter((item) => item.id !== bookId)
-    console.log(updatedBooks)
     setBook(updatedBooks)
   }
 
@@ -218,10 +227,37 @@ export default function Home() {
                           <div className="ml-auto">
                             <span className="flex flex-row gap-6 ">
                               <Edit className="w-4 h-4 opacity-55 hover:opacity-100" />
-                              <Trash2Icon
-                                className="w-4 h-4 opacity-55 hover:opacity-100"
-                                onClick={() => deleteBook(item.id)}
-                              />
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Trash2Icon className="w-4 h-4 opacity-55 hover:opacity-100" />
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                  <DialogHeader>
+                                    <DialogTitle>Delete</DialogTitle>
+                                    <DialogDescription>
+                                      Are you sure you want to permanently
+                                      delete
+                                      {` ${item.title}`}
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <DialogFooter>
+                                    <DialogClose asChild>
+                                      <Button
+                                        variant="outline"
+                                        type="submit"
+                                        onClick={() => deleteBook(item.id)}
+                                      >
+                                        Yes
+                                      </Button>
+                                    </DialogClose>
+                                    <DialogClose asChild>
+                                      <Button variant="outline" type="submit">
+                                        No
+                                      </Button>
+                                    </DialogClose>
+                                  </DialogFooter>
+                                </DialogContent>
+                              </Dialog>
                             </span>
                           </div>
                         </div>
