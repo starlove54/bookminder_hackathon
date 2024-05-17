@@ -240,7 +240,7 @@ export default function Home() {
                     ))}
                   {filteredBooks.length === 0 && (
                     <div className="text-gray-500 flex bg-gray-100 h-8  rounded-full   justify-center items-center">
-                      Couldn't find anything...
+                      Could not find anything...
                     </div>
                   )}
                   {/* Original book list */}
