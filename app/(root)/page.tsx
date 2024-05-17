@@ -300,7 +300,11 @@ export default function Home() {
                             <>
                               <div
                                 key={item.id}
-                                className="flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden"
+                                className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full h-full  pt-4  ${
+                                  selectedBookId === item.id
+                                    ? 'bg-gray-200 text-gray-500'
+                                    : ''
+                                }`}
                                 onClick={() => readBook(item.id)}
                               >
                                 {item.title}
