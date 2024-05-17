@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@radix-ui/react-separator'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
-import { Edit, Trash2Icon } from 'lucide-react'
+import { Edit, Trash2Icon, CircleX, CircleCheck } from 'lucide-react'
 import {
   Dialog,
   DialogClose,
@@ -44,6 +44,23 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [newBookTitle, setNewBookTitle] = useState<string>('')
   const [addNewStory, setAddNewStory] = useState(false)
+  const [editingBookId, setEditingBookId] = useState<string | null>(null)
+  const [editedBookTitle, setEditedBookTitle] = useState<string>('')
+  const [originalBookTitle, setOriginalBookTitle] = useState<string>('')
+
+  const editBookTitle = (bookId: string, title: string) => {
+    const updatedBooks = books.map((book) => {
+      if (book.id === bookId) {
+        return {
+          ...book,
+          title: title,
+        }
+      }
+      return book
+    })
+    setBook(updatedBooks)
+    setEditingBookId(null) // Exit editing mode
+  }
 
   const readBook = (id: string) => {
     setSelectedBookId(id)
@@ -137,6 +154,10 @@ export default function Home() {
     setBook(updatedBooks)
   }
 
+  const handleEmptySearchQuery = () => {
+    setSearchQuery('')
+  }
+
   return (
     <main>
       <div className="flex flex-1 overflow-hidden">
@@ -146,35 +167,46 @@ export default function Home() {
             <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950 ">
               <div className="flex items-center gap-2  font-semibold text-gray-600 dark:text-gray-50">
                 <span className="text-lg">My Stories</span>
-                <div className="flex justify-center max-w-[300px]">
+                <div className="flex justify-center items-center gap-1 max-w-[300px]">
                   <Input
                     value={searchQuery}
                     onChange={handleSearchInputChange}
                     className="h-8 font-small"
                   />
+                  {searchQuery.length > 0 && (
+                    <CircleX
+                      color="rgb(107 114 128)"
+                      opacity={0.7}
+                      width={22}
+                      height={22}
+                      onClick={handleEmptySearchQuery}
+                    />
+                  )}
                 </div>
               </div>
             </div>
             <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4 ">
-              <div className="left-panel text-wrap whitespace-normal  px-4   ">
-                <div className="flex justify-center pb-1 pt-3  ">
-                  <Button
-                    className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
-                    variant="outline"
-                    onClick={handleAddNewStory}
-                  >
-                    {addNewStory ? 'Add later' : 'New Story'}
-                  </Button>
+              <div className="left-panel text-wrap whitespace-normal px-4">
+                <div className="flex justify-center pb-1 pt-3 ">
+                  {searchQuery.length === 0 && (
+                    <Button
+                      className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
+                      variant="outline"
+                      onClick={handleAddNewStory}
+                    >
+                      {addNewStory ? 'Add later' : 'New Story'}
+                    </Button>
+                  )}
                 </div>
-                <div className="stories-panel text-wrap whitespace-normal  flex flex-col  gap-1   ">
+                <div className="stories-panel text-wrap whitespace-normal  flex flex-col gap-1    ">
                   {/* adding new title */}
                   <div className="flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500 ">
-                    {addNewStory && (
+                    {searchQuery.length === 0 && addNewStory && (
                       <>
                         <Input
                           type="text"
-                          className="h-8"
-                          placeholder="Enter new story title..."
+                          className="h-8 mr-10"
+                          placeholder="Enter new story..."
                           value={newBookTitle}
                           onChange={(e) => {
                             if (e.target.value.length <= 50) {
@@ -217,49 +249,105 @@ export default function Home() {
                           />
                         )}
                         <div className="flex flex-row justify-start items-center gap-2 ">
-                          <div
-                            key={item.id}
-                            className="flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  "
-                            onClick={() => readBook(item.id)}
-                          >
-                            {item.title}
-                          </div>
-                          <div className="ml-auto">
-                            <span className="flex flex-row gap-6 ">
-                              <Edit className="w-4 h-4 opacity-55 hover:opacity-100" />
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Trash2Icon className="w-4 h-4 opacity-55 hover:opacity-100" />
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
-                                  <DialogHeader>
-                                    <DialogTitle>Delete</DialogTitle>
-                                    <DialogDescription>
-                                      Are you sure you want to permanently
-                                      delete
-                                      {` ${item.title}`}
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <DialogFooter>
-                                    <DialogClose asChild>
-                                      <Button
-                                        variant="outline"
-                                        type="submit"
-                                        onClick={() => deleteBook(item.id)}
-                                      >
-                                        Yes
-                                      </Button>
-                                    </DialogClose>
-                                    <DialogClose asChild>
-                                      <Button variant="outline" type="submit">
-                                        No
-                                      </Button>
-                                    </DialogClose>
-                                  </DialogFooter>
-                                </DialogContent>
-                              </Dialog>
-                            </span>
-                          </div>
+                          {editingBookId === item.id ? (
+                            <>
+                              <Input
+                                type="text"
+                                className={`h-10 w-50 flex justify-center items-center border-none text-lg text-gray-500 ${
+                                  editingBookId === item.id ? 'bg-gray-100' : ''
+                                }`}
+                                value={editedBookTitle}
+                                onChange={(e) =>
+                                  setEditedBookTitle(e.target.value)
+                                }
+                                placeholder={
+                                  editedBookTitle.trim() !== ''
+                                    ? ''
+                                    : 'Please enter a title...'
+                                }
+                                onBlur={() => {
+                                  if (editedBookTitle.trim() === '') {
+                                    // Reset to original value and exit editing mode
+                                    setEditedBookTitle(originalBookTitle)
+                                    setEditingBookId(null)
+                                  } else {
+                                    // Save the edited title and exit editing mode
+                                    editBookTitle(item.id, editedBookTitle)
+                                    setEditingBookId(null)
+                                  }
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === 'Return') {
+                                    e.currentTarget.blur() // Close editing mode
+                                  }
+                                }}
+                                autoFocus // Automatically focuses the input field
+                              />
+                              <div className="ml-auto">
+                                <CircleCheck
+                                  color="rgb(107 114 128)"
+                                  height={22}
+                                  width={22}
+                                />
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                key={item.id}
+                                className="flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden"
+                                onClick={() => readBook(item.id)}
+                              >
+                                {item.title}
+                              </div>
+                              <div className="ml-auto">
+                                <span className="flex flex-row gap-6 ">
+                                  <Edit
+                                    className="w-4 h-4 opacity-55 hover:opacity-100"
+                                    onClick={() => {
+                                      setEditedBookTitle(item.title) // Reset edited title
+                                      setEditingBookId(item.id)
+                                      setOriginalBookTitle(item.title)
+                                    }}
+                                  />
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <Trash2Icon className="w-4 h-4 opacity-55 hover:opacity-100" />
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                      <DialogHeader>
+                                        <DialogTitle>Delete</DialogTitle>
+                                        <DialogDescription>
+                                          Are you sure you want to permanently
+                                          delete
+                                          {` ${item.title}`}
+                                        </DialogDescription>
+                                      </DialogHeader>
+                                      <DialogFooter>
+                                        <DialogClose asChild>
+                                          <Button
+                                            variant="outline"
+                                            type="submit"
+                                            onClick={() => deleteBook(item.id)}
+                                          >
+                                            Yes
+                                          </Button>
+                                        </DialogClose>
+                                        <DialogClose asChild>
+                                          <Button
+                                            variant="outline"
+                                            type="submit"
+                                          >
+                                            No
+                                          </Button>
+                                        </DialogClose>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                </span>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </>
                     ))}
