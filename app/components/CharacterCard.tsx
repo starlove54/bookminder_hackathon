@@ -101,12 +101,19 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
             <DialogFooter>
               <DialogClose>
-                <Button onClick={handleUpdate} type="submit">
+                <Button
+                  variant="outline"
+                  className="text-gray-500"
+                  onClick={handleUpdate}
+                  type="submit"
+                >
                   update
                 </Button>
               </DialogClose>
               <DialogClose>
-                <Button>Cancel</Button>
+                <Button variant="outline" className="text-gray-500">
+                  Cancel
+                </Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>

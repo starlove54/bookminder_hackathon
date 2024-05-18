@@ -209,7 +209,7 @@ export default function Home() {
             <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950 ">
               <div className="flex items-center gap-2  font-semibold text-gray-600 dark:text-gray-50">
                 <span className="text-lg">My Stories</span>
-                <div className="flex justify-center items-center gap-1 max-w-[300px]">
+                <div className="flex justify-center items-center gap-1 max-w-[300px] ">
                   {/* <Search className=" w-5 h-5 text-gray-500" /> */}
                   <Input
                     value={searchQuery}
@@ -230,9 +230,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4 ">
-              <div className="left-panel text-wrap whitespace-normal px-4">
-                <div className="flex justify-center pb-1 pt-3 ">
+            <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4   ">
+              <div className="left-panel text-wrap whitespace-normal px-4  ">
+                <div className="flex justify-center pb-1 pt-3   ">
                   {searchQuery.length === 0 && (
                     <Button
                       className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
@@ -243,7 +243,7 @@ export default function Home() {
                     </Button>
                   )}
                 </div>
-                <div className="stories-panel text-wrap whitespace-normal  flex flex-col gap-1    ">
+                <div className="stories-panel  text-wrap whitespace-normal  flex flex-col gap-1  ">
                   {/* adding new title */}
                   <div className="   flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500 ">
                     {searchQuery.length === 0 && addNewStory && (
@@ -345,7 +345,7 @@ export default function Home() {
                             <>
                               <div
                                 key={item.id}
-                                className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-slate-200 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full  pt-4 h-full ${
+                                className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-slate-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full  pt-4 h-full ${
                                   selectedBookId === item.id
                                     ? 'bg-slate-200 text-gray-500'
                                     : ''
@@ -424,7 +424,7 @@ export default function Home() {
           <div className="flex-1 overflow-auto p-6">
             <div className="flex gap-4 mb-4">
               <button
-                className={`text-xl rounded-full font-semibold text-gray-500 mb-2 dark:text-gray-50 px-4 py-2 ${
+                className={`text-xl rounded-full font-medium text-gray-500 hover:bg-slate-100 mb-2 dark:text-gray-50 px-4 py-2 ${
                   activeTab === 'characters' ? 'bg-slate-200' : ''
                 }`}
                 onClick={() => setActiveTab('characters')}
@@ -432,7 +432,7 @@ export default function Home() {
                 Characters
               </button>
               <button
-                className={`text-xl rounded-full font-semibold text-gray-500 mb-2 dark:text-gray-50 px-4 py-2 ${
+                className={`text-xl rounded-full font-medium hover:bg-slate-100 text-gray-500 mb-2 dark:text-gray-50 px-4 py-2 ${
                   activeTab === 'storypoints' ? 'bg-slate-200' : ''
                 }`}
                 onClick={() => setActiveTab('storypoints')}
@@ -445,11 +445,32 @@ export default function Home() {
               <div className="character-tab p-4 ">
                 <div>
                   <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" className="h-8 w-30 mb-4">
-                        Add character
-                      </Button>
-                    </DialogTrigger>
+                    <div className="flex  gap-4  ">
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="h-8 w-30 mb-4">
+                          Add character
+                        </Button>
+                      </DialogTrigger>
+                      <div className="flex  gap-1 max-w-[300px] ">
+                        {/* <Search className=" w-5 h-5 text-gray-500" /> */}
+                        <Input
+                          value={searchQuery}
+                          placeholder={`🔍 Search character...`}
+                          onChange={handleSearchInputChange}
+                          className="h-8 font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
+                        />
+
+                        {searchQuery.length > 0 && (
+                          <CircleX
+                            color="rgb(107 114 128)"
+                            opacity={0.7}
+                            width={22}
+                            height={22}
+                            onClick={handleEmptySearchQuery}
+                          />
+                        )}
+                      </div>
+                    </div>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
                         <DialogTitle className="text-2xl">
@@ -499,13 +520,19 @@ export default function Home() {
                               newCharacterCardDescription.length === 0
                             }
                             onClick={addCharacter}
+                            className="text-gray-500"
                             type="submit"
+                            variant="outline"
                           >
                             Add
                           </Button>
                         </DialogClose>
                         <DialogClose>
-                          <Button onClick={handleCharacterDialogClose}>
+                          <Button
+                            variant="outline"
+                            className="text-gray-500"
+                            onClick={handleCharacterDialogClose}
+                          >
                             Cancel
                           </Button>
                         </DialogClose>
