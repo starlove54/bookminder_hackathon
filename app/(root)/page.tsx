@@ -538,16 +538,10 @@ export default function Home() {
                       </div>
                       <DialogFooter>
                         <DialogClose
-                          disabled={
-                            newCharacterCardName.length === 0 ||
-                            newCharacterCardDescription.length === 0
-                          }
+                          disabled={newCharacterCardName.length === 0}
                         >
                           <Button
-                            disabled={
-                              newCharacterCardName.length === 0 ||
-                              newCharacterCardDescription.length === 0
-                            }
+                            disabled={newCharacterCardName.length === 0}
                             onClick={addCharacter}
                             className="text-gray-500"
                             type="submit"

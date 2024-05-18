@@ -45,6 +45,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const handleDelete = () => {
     onDelete(bookId, characterCardKey)
+    setEditedCharacterDescription(description)
+    setEditedCharacterTitle(title)
   }
 
   const handleUpdate = () => {
@@ -104,12 +106,13 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
               </div>
             </div>
             <DialogFooter>
-              <DialogClose>
+              <DialogClose disabled={editedCharacterTitle.length === 0}>
                 <Button
                   variant="outline"
                   className="text-gray-500"
                   onClick={handleUpdate}
                   type="submit"
+                  disabled={editedCharacterTitle.length === 0}
                 >
                   update
                 </Button>
