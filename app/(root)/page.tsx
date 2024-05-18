@@ -5,7 +5,7 @@ import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
-import { Search, Edit, Trash2Icon, CircleX, CircleCheck } from 'lucide-react'
+import { Edit, Trash2Icon, CircleX, CircleCheck } from 'lucide-react'
 import {
   Dialog,
   DialogClose,
@@ -41,7 +41,8 @@ type Book = {
 export default function Home() {
   const [books, setBook] = useState<Book[]>(bookItems)
   const [selectedBookId, setSelectedBookId] = useState('1')
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [storiesSearchQuery, setStoriesSearchQuery] = useState<string>('')
+  const [characterSearchQuery, setCharacterSearchQuery] = useState<string>('')
   const [newBookTitle, setNewBookTitle] = useState<string>('')
   const [addNewStory, setAddNewStory] = useState(false)
   const [editingBookId, setEditingBookId] = useState<string | null>(null)
@@ -108,17 +109,42 @@ export default function Home() {
     setBook(updatedBooks)
   }
 
-  const handleSearchInputChange = (
+  const handleStoriesSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchQuery(event.target.value)
+    setStoriesSearchQuery(event.target.value)
+  }
+
+  const handleCharacterSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCharacterSearchQuery(event.target.value)
+  }
+
+  const getFilteredCharacters = () => {
+    const selectedBook = books.find((book) => book.id === selectedBookId)
+    if (!selectedBook) return []
+
+    const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase()
+    const query = normalize(characterSearchQuery)
+
+    const filteredCharacters = selectedBook.characters.filter((character) =>
+      normalize(character.title).includes(query)
+    )
+
+    // If there's a search query, sort the filtered characters to show them at the top
+    return query
+      ? filteredCharacters.sort((a, b) =>
+          normalize(a.title).localeCompare(normalize(b.title))
+        )
+      : selectedBook.characters
   }
 
   const filteredBooks = books.filter((book) =>
     book.title
       .replace(/\s/g, '')
       .toLowerCase()
-      .includes(searchQuery.replace(/\s/g, '').toLowerCase())
+      .includes(storiesSearchQuery.replace(/\s/g, '').toLowerCase())
   )
 
   const addNewBook = () => {
@@ -161,8 +187,11 @@ export default function Home() {
     }
   }
 
-  const handleEmptySearchQuery = () => {
-    setSearchQuery('')
+  const handleEmptystoriesSearchQuery = () => {
+    setStoriesSearchQuery('')
+  }
+  const handleEmptyCharacterSearchQuery = () => {
+    setCharacterSearchQuery('')
   }
   const handleCharacterDialogClose = () => {
     // Reset input values or states related to the dialog here
@@ -212,19 +241,19 @@ export default function Home() {
                 <div className="flex justify-center items-center gap-1 max-w-[300px] ">
                   {/* <Search className=" w-5 h-5 text-gray-500" /> */}
                   <Input
-                    value={searchQuery}
+                    value={storiesSearchQuery}
                     placeholder={`🔍 Search your story...`}
-                    onChange={handleSearchInputChange}
+                    onChange={handleStoriesSearchInputChange}
                     className="h-8 font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
                   />
 
-                  {searchQuery.length > 0 && (
+                  {storiesSearchQuery.length > 0 && (
                     <CircleX
                       color="rgb(107 114 128)"
                       opacity={0.7}
                       width={22}
                       height={22}
-                      onClick={handleEmptySearchQuery}
+                      onClick={handleEmptystoriesSearchQuery}
                     />
                   )}
                 </div>
@@ -233,7 +262,7 @@ export default function Home() {
             <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4   ">
               <div className="left-panel text-wrap whitespace-normal px-4  ">
                 <div className="flex justify-center pb-1 pt-3   ">
-                  {searchQuery.length === 0 && (
+                  {storiesSearchQuery.length === 0 && (
                     <Button
                       className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
                       variant="outline"
@@ -246,7 +275,7 @@ export default function Home() {
                 <div className="stories-panel  text-wrap whitespace-normal  flex flex-col gap-1  ">
                   {/* adding new title */}
                   <div className="   flex items-center flex-col sm:flex-row gap-2 rounded-lg px-3 py-1 text-gray-500 ">
-                    {searchQuery.length === 0 && addNewStory && (
+                    {storiesSearchQuery.length === 0 && addNewStory && (
                       <>
                         <Input
                           type="text"
@@ -272,7 +301,7 @@ export default function Home() {
                   </div>
 
                   {/* Render filtered books while being searched in search box */}
-                  {searchQuery.length >= 1 &&
+                  {storiesSearchQuery.length >= 1 &&
                     filteredBooks.map((item, index) => (
                       <div
                         key={item.id}
@@ -280,7 +309,7 @@ export default function Home() {
                         onClick={() => readBook(item.id)}
                       >
                         {/* {item.title} */}
-                        {highlightText(item.title, searchQuery)}
+                        {highlightText(item.title, storiesSearchQuery)}
                       </div>
                     ))}
                   {filteredBooks.length === 0 && (
@@ -289,7 +318,7 @@ export default function Home() {
                     </div>
                   )}
                   {/* Original book list */}
-                  {searchQuery.length === 0 &&
+                  {storiesSearchQuery.length === 0 &&
                     books.map((item, index) => (
                       <>
                         {/* {index >= 1 && (
@@ -454,19 +483,19 @@ export default function Home() {
                       <div className="flex  gap-1 max-w-[300px] ">
                         {/* <Search className=" w-5 h-5 text-gray-500" /> */}
                         <Input
-                          value={searchQuery}
+                          value={characterSearchQuery}
                           placeholder={`🔍 Search character...`}
-                          onChange={handleSearchInputChange}
+                          onChange={handleCharacterSearchInputChange}
                           className="h-8 font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
                         />
 
-                        {searchQuery.length > 0 && (
+                        {characterSearchQuery.length > 0 && (
                           <CircleX
                             color="rgb(107 114 128)"
                             opacity={0.7}
                             width={22}
                             height={22}
-                            onClick={handleEmptySearchQuery}
+                            onClick={handleEmptyCharacterSearchQuery}
                           />
                         )}
                       </div>
@@ -540,11 +569,26 @@ export default function Home() {
                     </DialogContent>
                   </Dialog>
                 </div>
-
-                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
-                  {books
-                    .find((item) => item.id === selectedBookId)
-                    ?.characters.map((character) => (
+                {characterSearchQuery.length === 0 && (
+                  <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
+                    {books
+                      .find((item) => item.id === selectedBookId)
+                      ?.characters.map((character) => (
+                        <CharacterCard
+                          key={character.id}
+                          characterCardKey={character.id}
+                          title={character.title}
+                          description={character.description}
+                          bookId={selectedBookId}
+                          onDelete={removeCharacter}
+                          onUpdate={updateCharacter}
+                        />
+                      ))}
+                  </div>
+                )}
+                {characterSearchQuery.length > 0 && (
+                  <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+                    {getFilteredCharacters().map((character) => (
                       <CharacterCard
                         key={character.id}
                         characterCardKey={character.id}
@@ -553,9 +597,11 @@ export default function Home() {
                         bookId={selectedBookId}
                         onDelete={removeCharacter}
                         onUpdate={updateCharacter}
+                        characterSearchQuery={characterSearchQuery}
                       />
                     ))}
-                </div>
+                  </div>
+                )}
               </div>
             )}
 

@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
+import { highlightText } from '../Utilities/HighlightText'
 
 type CharacterCardProps = {
   characterCardKey: string
@@ -26,6 +27,7 @@ type CharacterCardProps = {
     title: string,
     description: string
   ) => void
+  characterSearchQuery?: string
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -35,6 +37,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   description,
   onDelete,
   onUpdate,
+  characterSearchQuery = '',
 }) => {
   const [editedCharacterTitle, setEditedCharacterTitle] = useState(title)
   const [editedCharacterDescription, setEditedCharacterDescription] =
@@ -56,7 +59,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   return (
     <div className="bg-white shadow-md hover:shadow-xl transition-shadow dark:bg-gray-950 px-4 py-8  border-t-2 ">
       <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-50">
-        {title}
+        {highlightText(title, characterSearchQuery)}
+        {/* {title} */}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
       <div className="mt-4 flex items-center gap-2">
