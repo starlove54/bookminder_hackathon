@@ -23,11 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.variable}>
+      <body className={`${poppins.variable} `}>
         <Header />
-        <div className="flex h-screen w-full flex-col">
+        <div className=" flex  w-full flex-col h-screen   py-4 ">
           <Navbar />
-          <main className=" relative overflow-hidden">{children}</main>
+          <main className="flex-grow   overflow-y-auto  m-6 py-2  ">
+            {children}
+          </main>
         </div>
         {/* <Footer /> */}
       </body>
