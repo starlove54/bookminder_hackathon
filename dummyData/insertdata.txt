@@ -1,0 +1,42 @@
+//id: aab3a0be-15dc-11ef-b93a-039e50a122f6
+insert Users {
+  email := "testUser@bookminder.xyz",
+  username := "testUser",
+  password := "password",
+  fname := "anubhav",
+  lname := "negi"
+};
+
+
+//id : 71e776ea-15df-11ef-9d0a-170b77b96e3f
+insert Stories {
+      title := "Harry Potter and the Philosopher's stone",
+      characters := 
+      {
+      (insert Characters {
+      title := "Harry Potter",
+      description := "The main protagonist, a young wizard who discovers his magical heritage on his eleventh birthday."
+      }),
+      (insert Characters {
+      title := "Hermione Granger",
+      description:= "Harry's intelligent and resourceful friend, known for her extensive knowledge of magic."
+      }),
+      (insert Characters {
+      title:= "Ron Weasley",
+      description := "Harry's loyal and brave best friend, coming from a large family of wizards."
+      }),
+      },
+
+      storypoints :=
+      {
+      (insert Storypoints {
+      title:= "The Philosopher's Stone",
+      description := "Harry's quest to prevent Voldemort from obtaining the Philosopher's Stone, a powerful magical artifact."
+      }) ,
+      (insert Storypoints {
+      title:= "Quidditch Match",
+      description := "Harry's first experience playing Quidditch, showcasing his talent and bravery."
+      }) 
+      } ,
+}
+
