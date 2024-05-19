@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`${poppins.variable} h-full`}>
+    <html lang="en">
+      <body className={`${poppins.variable} `}>
         <Header />
         <div className="flex h-screen w-full flex-col">
           <Navbar />
