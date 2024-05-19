@@ -27,7 +27,7 @@ export default function RootLayout({
         <Header />
         <div className=" flex  w-full flex-col h-screen   py-4 ">
           <Navbar />
-          <main className="flex-grow   overflow-y-scroll  m-6 py-2  ">
+          <main className="flex-grow   overflow-y-auto  m-6 py-2  ">
             {children}
           </main>
         </div>

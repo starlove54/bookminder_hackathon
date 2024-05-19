@@ -647,7 +647,7 @@ export default function Home() {
                   </Dialog>
                 </div>
                 {characterSearchQuery.length === 0 && (
-                  <div className=" grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 py-6  overflow-y-scroll  max-h-screen">
+                  <div className=" grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 py-6  overflow-y-auto  max-h-screen">
                     {books
                       .find((item) => item.id === selectedBookId)
                       ?.characters.map((character) => (
@@ -684,7 +684,7 @@ export default function Home() {
 
             {activeTab === 'storypoints' && (
               <div className="storypoints-tab grid gap-4 ">
-                <div className=" p-2 overflow-y-scroll h-screen ">
+                <div className=" p-2 overflow-y-auto h-screen ">
                   <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
                     {books
                       .find((item) => item.id === selectedBookId)
