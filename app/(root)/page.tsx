@@ -1,7 +1,7 @@
 'use client'
 import Card from '../Components/Card'
 import Plus from '../Components/Plus'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@radix-ui/react-separator'
@@ -18,25 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { createStory, createStory1, createStoryTitle, deleteStory, getStories, getStoryById } from '../api/stories'
+import { Book, Character, StoryPoint } from '@/variables'
+import { resolve } from 'path'
+import { rejects } from 'assert'
 
-type Character = {
-  id: string
-  title: string
-  description: string
-}
-
-type StoryPoint = {
-  id: string
-  title: string
-  description: string
-}
-
-type Book = {
-  id: string
-  title: string
-  characters: Character[]
-  storypoints: StoryPoint[]
-}
 
 export default function Home() {
   const [books, setBook] = useState<Book[]>(bookItems)
@@ -48,6 +34,15 @@ export default function Home() {
   const readBook = (id: string) => {
     setSelectedBookId(id)
   }
+
+
+  async function storiesList() {
+    const list = await getStories();
+    console.log(list);
+   return list;
+  }
+
+
   const addCharacter = () => {
     // Find the book with the selected ID
     const selectedBook = books.find((item) => item.id === selectedBookId)
@@ -136,6 +131,28 @@ export default function Home() {
     const updatedBooks = books.filter((item) => item.id !== bookId)
     setBook(updatedBooks)
   }
+  useEffect(() => {
+    // const stryList = async () => {
+    //   const value = await getStories();
+    //   console.log(value);
+    //   return value
+    // }
+    // const value = getStories();
+    //const value = getStoryById("71e776ea-15df-11ef-9d0a-170b77b96e3f");
+    const characters: Character[] = [
+      { title: 'Character 1', description: 'Description 1' ,id:''},
+      { title: 'Character 2',id:'' ,description: 'Description 2' }
+    ];
+    
+    const storypoints: StoryPoint[] = [
+      { title: 'Storypoint 1', description: 'Description 1' ,id:''},
+      { title: 'Storypoint 2',description: 'Description 2',id:'' }
+    ];
+    const value = createStory("test story12",characters,storypoints);
+    //const value = deleteStory("71e776ea-15df-11ef-9d0a-170b77b96e3f");
+    console.log(JSON.stringify(value, null, 2));
+    console.log(value);
+  });
 
   return (
     <main>
