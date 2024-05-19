@@ -315,8 +315,8 @@ export default function Home() {
 
   return (
     <main>
-      <div className="flex flex-1 overflow-hidden">
-        <div className="border-r min-w-[230px] max-w-[230px] sm:min-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
+      <div className=" flex flex-1 border-b   ">
+        <div className=" border-r min-w-[230px] max-w-[230px] sm:min-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
           <div className="flex h-full max-h-screen flex-col   sm:min-w-[350px] ">
             {/* Search input */}
             <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950 ">
@@ -572,7 +572,6 @@ export default function Home() {
                           onChange={handleCharacterSearchInputChange}
                           className="h-8 font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
                         />
-
                         {characterSearchQuery.length > 0 && (
                           <CircleX
                             color="rgb(107 114 128)"
@@ -648,7 +647,7 @@ export default function Home() {
                   </Dialog>
                 </div>
                 {characterSearchQuery.length === 0 && (
-                  <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
+                  <div className=" grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 py-6  overflow-y-scroll  max-h-screen">
                     {books
                       .find((item) => item.id === selectedBookId)
                       ?.characters.map((character) => (
@@ -684,202 +683,205 @@ export default function Home() {
             )}
 
             {activeTab === 'storypoints' && (
-              <div className="storypoints-tab grid gap-4 py-2 ">
-                <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
-                  {books
-                    .find((item) => item.id === selectedBookId)
-                    ?.storypoints.map((item) => (
-                      <div
-                        key={item.id}
-                        className="grid gap-4 text-sm relative "
-                      >
-                        <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50 " />
-                        <Accordion
-                          type="single"
-                          collapsible
-                          className="font-medium"
+              <div className="storypoints-tab grid gap-4 ">
+                <div className=" p-2 overflow-y-scroll h-screen ">
+                  <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
+                    {books
+                      .find((item) => item.id === selectedBookId)
+                      ?.storypoints.map((item) => (
+                        <div
+                          key={item.id}
+                          className="grid gap-4 text-sm relative "
                         >
                           <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50 " />
-                          <AccordionItem value={`item-${item.id}`}>
-                            <AccordionTrigger className="flex justify-start  gap-6 mr-auto ">
-                              {item.title}
-                              <span className="flex gap-6">
-                                <Dialog>
-                                  <DialogTrigger asChild>
-                                    <Edit
-                                      className="w-4 h-4 ml-10 opacity-55 hover:opacity-100"
-                                      onClick={() =>
-                                        handleEditStorypoint(
-                                          item.title,
-                                          item.description
-                                        )
-                                      }
-                                    />
-                                  </DialogTrigger>
-                                  <DialogContent className="sm:max-w-[425px]">
-                                    <DialogHeader>
-                                      <DialogTitle className="text-2xl">
-                                        {item.title}
-                                      </DialogTitle>
-                                    </DialogHeader>
-                                    <div className="flex flex-col gap-10 py-4">
-                                      <div className="flex flex-col justify-start  gap-2 ">
-                                        <Label
-                                          htmlFor="name"
-                                          className="flex justify-start text-right"
-                                        >
-                                          Name
-                                        </Label>
-                                        <Input
-                                          id="name"
-                                          maxLength={100}
-                                          placeholder="storypoint title"
-                                          value={editedStoryPointTitle}
-                                          onChange={(e) =>
-                                            setEditedStoryPointTitle(
-                                              e.target.value
-                                            )
-                                          }
-                                        />
+                          <Accordion
+                            type="single"
+                            collapsible
+                            className="font-medium"
+                          >
+                            <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50 " />
+                            <AccordionItem value={`item-${item.id}`}>
+                              <AccordionTrigger className="flex justify-start  gap-6 mr-auto ">
+                                {item.title}
+                                <span className="flex gap-6">
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <Edit
+                                        className="w-4 h-4 ml-10 opacity-55 hover:opacity-100"
+                                        onClick={() =>
+                                          handleEditStorypoint(
+                                            item.title,
+                                            item.description
+                                          )
+                                        }
+                                      />
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                      <DialogHeader>
+                                        <DialogTitle className="text-2xl">
+                                          {item.title}
+                                        </DialogTitle>
+                                      </DialogHeader>
+                                      <div className="flex flex-col gap-10 py-4">
+                                        <div className="flex flex-col justify-start  gap-2 ">
+                                          <Label
+                                            htmlFor="name"
+                                            className="flex justify-start text-right"
+                                          >
+                                            Name
+                                          </Label>
+                                          <Input
+                                            id="name"
+                                            maxLength={100}
+                                            placeholder="storypoint title"
+                                            value={editedStoryPointTitle}
+                                            onChange={(e) =>
+                                              setEditedStoryPointTitle(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        <div className="flex flex-col justify-start  gap-2">
+                                          <p>Description</p>
+                                          <Textarea
+                                            maxLength={3500}
+                                            placeholder="storypoint's description..."
+                                            value={editedStoryPointDescription}
+                                            onChange={(e) =>
+                                              setEditedStoryPointDescription(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </div>
                                       </div>
-                                      <div className="flex flex-col justify-start  gap-2">
-                                        <p>Description</p>
-                                        <Textarea
-                                          maxLength={3500}
-                                          placeholder="storypoint's description..."
-                                          value={editedStoryPointDescription}
-                                          onChange={(e) =>
-                                            setEditedStoryPointDescription(
-                                              e.target.value
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                    </div>
-                                    <DialogFooter>
-                                      <DialogClose
-                                        disabled={!editedStoryPointTitle}
-                                      >
-                                        <Button
-                                          variant="outline"
-                                          className="text-gray-500"
-                                          onClick={() =>
-                                            updateStorypoint(
-                                              selectedBookId,
-                                              item.id,
-                                              editedStoryPointTitle,
-                                              editedStoryPointDescription
-                                            )
-                                          }
-                                          type="submit"
+                                      <DialogFooter>
+                                        <DialogClose
                                           disabled={!editedStoryPointTitle}
                                         >
-                                          update
-                                        </Button>
-                                      </DialogClose>
-                                      <DialogClose>
-                                        <Button
-                                          variant="outline"
-                                          className="text-gray-500"
-                                        >
-                                          Cancel
-                                        </Button>
-                                      </DialogClose>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
-                                <Trash2Icon
-                                  className="w-4 h-4 opacity-55 hover:opacity-100"
-                                  onClick={() => {
-                                    handleDeleteStoryPoint(item.id)
-                                  }}
-                                />
-                              </span>
-                            </AccordionTrigger>
-                            <AccordionContent className="text-gray-500 dark:text-gray-400">
-                              {item.description}
-                            </AccordionContent>
-                          </AccordionItem>
-                          {/* <div className="grid gap-1 text-sm relative">
+                                          <Button
+                                            variant="outline"
+                                            className="text-gray-500"
+                                            onClick={() =>
+                                              updateStorypoint(
+                                                selectedBookId,
+                                                item.id,
+                                                editedStoryPointTitle,
+                                                editedStoryPointDescription
+                                              )
+                                            }
+                                            type="submit"
+                                            disabled={!editedStoryPointTitle}
+                                          >
+                                            update
+                                          </Button>
+                                        </DialogClose>
+                                        <DialogClose>
+                                          <Button
+                                            variant="outline"
+                                            className="text-gray-500"
+                                          >
+                                            Cancel
+                                          </Button>
+                                        </DialogClose>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
+                                  <Trash2Icon
+                                    className="w-4 h-4 opacity-55 hover:opacity-100"
+                                    onClick={() => {
+                                      handleDeleteStoryPoint(item.id)
+                                    }}
+                                  />
+                                </span>
+                              </AccordionTrigger>
+                              <AccordionContent className="text-gray-500 dark:text-gray-400">
+                                {item.description}
+                              </AccordionContent>
+                            </AccordionItem>
+                            {/* <div className="grid gap-1 text-sm relative">
                             <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />
                           </div> */}
-                        </Accordion>
-                      </div>
-                    ))}
-                </div>
-                <div className="ml-6">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="h-8 max-w-[125px] mb-4"
-                      >
-                        Add storypoint
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle className="text-2xl">
-                          New storypoint
-                        </DialogTitle>
-                      </DialogHeader>
-                      <div className="flex flex-col gap-10 py-4">
-                        <div className="flex flex-col justify-start  gap-2 ">
-                          <Label
-                            htmlFor="title"
-                            className="flex justify-start text-right"
-                          >
-                            Title
-                          </Label>
-                          <Input
-                            id="title"
-                            maxLength={100}
-                            placeholder="storypoint title..."
-                            value={newStorypointTitle}
-                            onChange={(e) =>
-                              setNewStorypointTitle(e.target.value)
-                            }
-                          />
+                          </Accordion>
                         </div>
-                        <div className="flex flex-col justify-start  gap-2">
-                          <p>Description</p>
-                          <Textarea
-                            maxLength={3500}
-                            placeholder="storypoint description..."
-                            value={newStorypointDescription}
-                            onChange={(e) =>
-                              setNewStorypointDescription(e.target.value)
-                            }
-                          />
+                      ))}
+                  </div>
+
+                  <div className="ml-6">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="h-8 max-w-[125px] my-4 mb-4"
+                        >
+                          Add storypoint
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle className="text-2xl">
+                            New storypoint
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="flex flex-col gap-10 py-4">
+                          <div className="flex flex-col justify-start  gap-2 ">
+                            <Label
+                              htmlFor="title"
+                              className="flex justify-start text-right"
+                            >
+                              Title
+                            </Label>
+                            <Input
+                              id="title"
+                              maxLength={100}
+                              placeholder="storypoint title..."
+                              value={newStorypointTitle}
+                              onChange={(e) =>
+                                setNewStorypointTitle(e.target.value)
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col justify-start  gap-2">
+                            <p>Description</p>
+                            <Textarea
+                              maxLength={3500}
+                              placeholder="storypoint description..."
+                              value={newStorypointDescription}
+                              onChange={(e) =>
+                                setNewStorypointDescription(e.target.value)
+                              }
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <DialogFooter>
-                        <DialogClose disabled={!newStorypointTitle}>
-                          <Button
-                            className="text-gray-500"
-                            type="submit"
-                            variant="outline"
-                            onClick={addStorypoint}
-                            disabled={!newStorypointTitle}
-                          >
-                            Add
-                          </Button>
-                        </DialogClose>
-                        <DialogClose>
-                          <Button
-                            onClick={() => {
-                              setNewStorypointTitle('')
-                              setNewStorypointDescription('')
-                            }}
-                            variant="outline"
-                            className="text-gray-500"
-                          >
-                            Cancel
-                          </Button>
-                        </DialogClose>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                        <DialogFooter>
+                          <DialogClose disabled={!newStorypointTitle}>
+                            <Button
+                              className="text-gray-500"
+                              type="submit"
+                              variant="outline"
+                              onClick={addStorypoint}
+                              disabled={!newStorypointTitle}
+                            >
+                              Add
+                            </Button>
+                          </DialogClose>
+                          <DialogClose>
+                            <Button
+                              onClick={() => {
+                                setNewStorypointTitle('')
+                                setNewStorypointDescription('')
+                              }}
+                              variant="outline"
+                              className="text-gray-500"
+                            >
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
               </div>
             )}

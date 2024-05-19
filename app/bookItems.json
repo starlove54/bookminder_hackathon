@@ -34,7 +34,7 @@
   },
   {
     "id": "2",
-    "title": "Harry Potter and the Philosopher's stone",
+    "title": "Harry Potter and the Philosopher's Stone",
     "characters": [
       {
         "id": "1",
@@ -194,6 +194,138 @@
         "id": "2",
         "title": "Holden's Red Hunting Cap",
         "description": "A symbolic item representing Holden's desire to protect innocence and individuality."
+      }
+    ]
+  },
+  {
+    "id": "7",
+    "title": "The Hobbit",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Bilbo Baggins",
+        "description": "The protagonist, a hobbit who embarks on an unexpected adventure."
+      },
+      {
+        "id": "2",
+        "title": "Gandalf",
+        "description": "A wise wizard who recruits Bilbo for the quest to reclaim Erebor."
+      },
+      {
+        "id": "3",
+        "title": "Thorin Oakenshield",
+        "description": "The leader of the dwarves seeking to reclaim their homeland from the dragon Smaug."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Riddles in the Dark",
+        "description": "Bilbo's encounter with Gollum, where he acquires the One Ring."
+      },
+      {
+        "id": "2",
+        "title": "The Battle of Five Armies",
+        "description": "A climactic battle involving humans, elves, dwarves, orcs, and eagles."
+      }
+    ]
+  },
+  {
+    "id": "8",
+    "title": "Moby-Dick",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Ishmael",
+        "description": "The narrator of the story, a sailor aboard the whaling ship Pequod."
+      },
+      {
+        "id": "2",
+        "title": "Captain Ahab",
+        "description": "The obsessed captain of the Pequod, seeking revenge on the white whale Moby Dick."
+      },
+      {
+        "id": "3",
+        "title": "Queequeg",
+        "description": "A skilled harpooner and Ishmael's close friend."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "Ahab's Quest",
+        "description": "Captain Ahab's monomaniacal pursuit of Moby Dick, symbolizing obsession and revenge."
+      },
+      {
+        "id": "2",
+        "title": "The Final Chase",
+        "description": "The climactic and tragic encounter between the Pequod and Moby Dick."
+      }
+    ]
+  },
+  {
+    "id": "9",
+    "title": "Frankenstein",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Victor Frankenstein",
+        "description": "The scientist who creates the Creature, driven by ambition and curiosity."
+      },
+      {
+        "id": "2",
+        "title": "The Creature",
+        "description": "Frankenstein's creation, seeking acceptance and revenge for his suffering."
+      },
+      {
+        "id": "3",
+        "title": "Elizabeth Lavenza",
+        "description": "Victor's fiancée, embodying beauty and virtue."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "The Creation",
+        "description": "Victor's successful but disastrous experiment to create life."
+      },
+      {
+        "id": "2",
+        "title": "The Creature's Revenge",
+        "description": "The Creature's acts of vengeance against Victor, culminating in tragedy."
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "title": "The Odyssey",
+    "characters": [
+      {
+        "id": "1",
+        "title": "Odysseus",
+        "description": "The hero of the epic, known for his cunning and resourcefulness."
+      },
+      {
+        "id": "2",
+        "title": "Penelope",
+        "description": "Odysseus's faithful wife, waiting for his return to Ithaca."
+      },
+      {
+        "id": "3",
+        "title": "Telemachus",
+        "description": "Odysseus's son, who grows into manhood during his father's absence."
+      }
+    ],
+    "storypoints": [
+      {
+        "id": "1",
+        "title": "The Trojan War",
+        "description": "The war from which Odysseus is returning, marking the beginning of his long journey."
+      },
+      {
+        "id": "2",
+        "title": "The Cyclops",
+        "description": "Odysseus's encounter with Polyphemus, showcasing his cleverness."
       }
     ]
   }

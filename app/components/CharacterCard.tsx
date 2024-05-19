@@ -59,7 +59,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   }
 
   return (
-    <div className="bg-white shadow-md hover:shadow-xl transition-shadow dark:bg-gray-950 px-4 py-8  border-t-2 ">
+    // max-w-[500px] max-h-[250px]
+    <div className=" bg-white shadow-md hover:shadow-xl transition-shadow dark:bg-gray-950 px-4 py-8  border-t-2 ">
       <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-50">
         {highlightText(title, characterSearchQuery)}
         {/* {title} */}
