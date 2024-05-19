@@ -2,6 +2,7 @@
 import { Book, Character, StoryPoint } from "@/variables";
 import * as edgedb from "edgedb";
 import e from '../../dbschema/edgeql-js'
+import { Users } from "@/dbschema/interfaces";
 
 const client = edgedb.createClient();
 
@@ -306,5 +307,16 @@ export async function createStory1(
       } catch (error) {
             console.error('Error creating story:', error);
       }
+}
+
+export async function checkUserExists(email: string) {
+      const user = await client.query<Users>(`\
+      select Users {
+            fname,
+            username
+      }
+      FILTER .email = <str>'${email}';
+      `)
+      return user;
 }
 

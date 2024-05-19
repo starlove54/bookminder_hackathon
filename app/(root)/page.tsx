@@ -18,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { createStory, createStory1, createStoryTitle, deleteStory, getStories, getStoryById } from '../api/stories'
+import { checkUserExists, createStory, createStory1, createStoryTitle, deleteStory, getStories, getStoryById } from '../api/stories'
 import { Book, Character, StoryPoint } from '@/variables'
 import { resolve } from 'path'
 import { rejects } from 'assert'
@@ -139,18 +139,20 @@ export default function Home() {
     // }
     // const value = getStories();
     //const value = getStoryById("71e776ea-15df-11ef-9d0a-170b77b96e3f");
-    const characters: Character[] = [
-      { title: 'Character 1', description: 'Description 1' ,id:''},
-      { title: 'Character 2',id:'' ,description: 'Description 2' }
-    ];
+    // const characters: Character[] = [
+    //   { title: 'Character 1', description: 'Description 1' ,id:''},
+    //   { title: 'Character 2',id:'' ,description: 'Description 2' }
+    // ];
     
-    const storypoints: StoryPoint[] = [
-      { title: 'Storypoint 1', description: 'Description 1' ,id:''},
-      { title: 'Storypoint 2',description: 'Description 2',id:'' }
-    ];
-    const value = createStory("test story12",characters,storypoints);
-    //const value = deleteStory("71e776ea-15df-11ef-9d0a-170b77b96e3f");
-    console.log(JSON.stringify(value, null, 2));
+    // const storypoints: StoryPoint[] = [
+    //   { title: 'Storypoint 1', description: 'Description 1' ,id:''},
+    //   { title: 'Storypoint 2',description: 'Description 2',id:'' }
+    // ];
+    // const value = createStory("test story12",characters,storypoints);
+    // //const value = deleteStory("71e776ea-15df-11ef-9d0a-170b77b96e3f");
+    // console.log(JSON.stringify(value, null, 2));
+    // console.log(value);
+    const value = checkUserExists("testUser@bookminder.xyz")
     console.log(value);
   });
 
