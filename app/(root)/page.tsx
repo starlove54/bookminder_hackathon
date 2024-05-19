@@ -18,6 +18,12 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 type Character = {
   id: string
@@ -51,7 +57,13 @@ export default function Home() {
   const [newCharacterCardName, setnewCharacterCardName] = useState<string>('')
   const [newCharacterCardDescription, setnewCharacterCardDescription] =
     useState<string>('')
+  const [newStorypointTitle, setNewStorypointTitle] = useState<string>('')
+  const [newStorypointDescription, setNewStorypointDescription] =
+    useState<string>('')
   const [activeTab, setActiveTab] = useState('characters')
+  const [editedStoryPointTitle, setEditedStoryPointTitle] = useState<string>('')
+  const [editedStoryPointDescription, setEditedStoryPointDescription] =
+    useState<string>('')
 
   const editBookTitle = (bookId: string, title: string) => {
     const updatedBooks = books.map((book) => {
@@ -91,6 +103,29 @@ export default function Home() {
       // Reset input values after adding character
       setnewCharacterCardName('')
       setnewCharacterCardDescription('')
+    }
+  }
+
+  const addStorypoint = () => {
+    if (!newStorypointTitle.trim()) return // Prevent adding character with empty name
+
+    const selectedBookIndex = books.findIndex(
+      (book) => book.id === selectedBookId
+    )
+    if (selectedBookIndex !== -1) {
+      const newStorypoint: StoryPoint = {
+        id: crypto.randomUUID(),
+        title: newStorypointTitle,
+        description: newStorypointDescription,
+      }
+
+      const updatedBooks = [...books]
+      updatedBooks[selectedBookIndex].storypoints.push(newStorypoint)
+      setBook(updatedBooks)
+
+      // Reset input values after adding character
+      setNewStorypointTitle('')
+      setNewStorypointDescription('')
     }
   }
 
@@ -187,6 +222,21 @@ export default function Home() {
     }
   }
 
+  const handleDeleteStoryPoint = (storyPointId: string) => {
+    const updatedBooks = books.map((book) => {
+      if (book.id === selectedBookId) {
+        return {
+          ...book,
+          storypoints: book.storypoints.filter(
+            (storypoint) => storypoint.id !== storyPointId
+          ),
+        }
+      }
+      return book
+    })
+    setBook(updatedBooks)
+  }
+
   const handleEmptystoriesSearchQuery = () => {
     setStoriesSearchQuery('')
   }
@@ -227,6 +277,40 @@ export default function Home() {
     })
 
     setBook(updatedBooks)
+  }
+
+  const updateStorypoint = (
+    bookId: string,
+    storypointId: string,
+    newTitle: string,
+    newDescription: string
+  ) => {
+    const updatedBooks = books.map((book) => {
+      if (book.id === bookId) {
+        const updatedStorypoints = book.storypoints.map((storypoint) => {
+          if (storypoint.id === storypointId) {
+            return {
+              ...storypoint,
+              title: newTitle,
+              description: newDescription,
+            }
+          }
+          return storypoint
+        })
+
+        return {
+          ...book,
+          storypoints: updatedStorypoints,
+        }
+      }
+      return book
+    })
+    setBook(updatedBooks)
+  }
+
+  const handleEditStorypoint = (title: string, description: string) => {
+    setEditedStoryPointTitle(title)
+    setEditedStoryPointDescription(description)
   }
 
   return (
@@ -600,29 +684,202 @@ export default function Home() {
             )}
 
             {activeTab === 'storypoints' && (
-              <div className="storypoints-tab grid gap-6 py-8 ">
+              <div className="storypoints-tab grid gap-4 py-2 ">
                 <div className="relative grid gap-4 pl-6 after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 dark:after:bg-gray-400/20">
-                  <div className="grid gap-4 text-sm relative">
-                    <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />
-                    {books
-                      .find((item) => item.id === selectedBookId)
-                      ?.storypoints.map((item) => (
-                        <>
-                          <div key={item.id} className="font-medium">
-                            {item.title}{' '}
-                          </div>
-                          <div
-                            key={item.id}
-                            className="text-gray-500 dark:text-gray-400"
+                  {books
+                    .find((item) => item.id === selectedBookId)
+                    ?.storypoints.map((item) => (
+                      <div
+                        key={item.id}
+                        className="grid gap-4 text-sm relative "
+                      >
+                        <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50 " />
+                        <Accordion
+                          type="single"
+                          collapsible
+                          className="font-medium"
+                        >
+                          <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50 " />
+                          <AccordionItem value={`item-${item.id}`}>
+                            <AccordionTrigger className="flex justify-start  gap-6 mr-auto ">
+                              {item.title}
+                              <span className="flex gap-6">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Edit
+                                      className="w-4 h-4 ml-10 opacity-55 hover:opacity-100"
+                                      onClick={() =>
+                                        handleEditStorypoint(
+                                          item.title,
+                                          item.description
+                                        )
+                                      }
+                                    />
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                      <DialogTitle className="text-2xl">
+                                        {item.title}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div className="flex flex-col gap-10 py-4">
+                                      <div className="flex flex-col justify-start  gap-2 ">
+                                        <Label
+                                          htmlFor="name"
+                                          className="flex justify-start text-right"
+                                        >
+                                          Name
+                                        </Label>
+                                        <Input
+                                          id="name"
+                                          maxLength={100}
+                                          placeholder="storypoint title"
+                                          value={editedStoryPointTitle}
+                                          onChange={(e) =>
+                                            setEditedStoryPointTitle(
+                                              e.target.value
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                      <div className="flex flex-col justify-start  gap-2">
+                                        <p>Description</p>
+                                        <Textarea
+                                          maxLength={3500}
+                                          placeholder="storypoint's description..."
+                                          value={editedStoryPointDescription}
+                                          onChange={(e) =>
+                                            setEditedStoryPointDescription(
+                                              e.target.value
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <DialogFooter>
+                                      <DialogClose
+                                        disabled={!editedStoryPointTitle}
+                                      >
+                                        <Button
+                                          variant="outline"
+                                          className="text-gray-500"
+                                          onClick={() =>
+                                            updateStorypoint(
+                                              selectedBookId,
+                                              item.id,
+                                              editedStoryPointTitle,
+                                              editedStoryPointDescription
+                                            )
+                                          }
+                                          type="submit"
+                                          disabled={!editedStoryPointTitle}
+                                        >
+                                          update
+                                        </Button>
+                                      </DialogClose>
+                                      <DialogClose>
+                                        <Button
+                                          variant="outline"
+                                          className="text-gray-500"
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </DialogClose>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                                <Trash2Icon
+                                  className="w-4 h-4 opacity-55 hover:opacity-100"
+                                  onClick={() => {
+                                    handleDeleteStoryPoint(item.id)
+                                  }}
+                                />
+                              </span>
+                            </AccordionTrigger>
+                            <AccordionContent className="text-gray-500 dark:text-gray-400">
+                              {item.description}
+                            </AccordionContent>
+                          </AccordionItem>
+                          {/* <div className="grid gap-1 text-sm relative">
+                            <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />
+                          </div> */}
+                        </Accordion>
+                      </div>
+                    ))}
+                </div>
+                <div className="ml-6">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-8 max-w-[125px] mb-4"
+                      >
+                        Add storypoint
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl">
+                          New storypoint
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="flex flex-col gap-10 py-4">
+                        <div className="flex flex-col justify-start  gap-2 ">
+                          <Label
+                            htmlFor="title"
+                            className="flex justify-start text-right"
                           >
-                            {item.description}{' '}
-                          </div>
-                        </>
-                      ))}
-                  </div>
-                  <div className="grid gap-1 text-sm relative">
-                    <div className="aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50" />
-                  </div>
+                            Title
+                          </Label>
+                          <Input
+                            id="title"
+                            maxLength={100}
+                            placeholder="storypoint title..."
+                            value={newStorypointTitle}
+                            onChange={(e) =>
+                              setNewStorypointTitle(e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="flex flex-col justify-start  gap-2">
+                          <p>Description</p>
+                          <Textarea
+                            maxLength={3500}
+                            placeholder="storypoint description..."
+                            value={newStorypointDescription}
+                            onChange={(e) =>
+                              setNewStorypointDescription(e.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose disabled={!newStorypointTitle}>
+                          <Button
+                            className="text-gray-500"
+                            type="submit"
+                            variant="outline"
+                            onClick={addStorypoint}
+                            disabled={!newStorypointTitle}
+                          >
+                            Add
+                          </Button>
+                        </DialogClose>
+                        <DialogClose>
+                          <Button
+                            onClick={() => {
+                              setNewStorypointTitle('')
+                              setNewStorypointDescription('')
+                            }}
+                            variant="outline"
+                            className="text-gray-500"
+                          >
+                            Cancel
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             )}
