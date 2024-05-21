@@ -12,7 +12,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Bookminder',
+  title: 'Bookminder: your note taking app for stories',
   description: 'Your key to finishing every story',
 }
 
@@ -25,11 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} `}>
         <Header />
-        <div className=" flex  w-full flex-col h-screen   py-4 ">
+        <div className=" flex  w-full flex-col h-screen   ">
           <Navbar />
-          <main className="flex-grow   overflow-y-auto  m-6 py-2  ">
-            {children}
-          </main>
+          <main className="flex-grow overflow-y-auto   ">{children}</main>
         </div>
         {/* <Footer /> */}
       </body>

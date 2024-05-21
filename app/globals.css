@@ -8,6 +8,19 @@ body,
   height: 100vh;
 } */
 
+.left-panel {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.left-panel.open {
+  transform: translateX(0);
+}
+
+.left-panel.closed {
+  transform: translateX(-100%);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
