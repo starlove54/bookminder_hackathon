@@ -59,14 +59,14 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   }
 
   return (
-    // max-w-[500px] max-h-[250px]
-    <div className=" bg-white shadow-md hover:shadow-xl transition-shadow dark:bg-gray-950 px-4 py-8  border-t-2 ">
+    // max-w-[500px]
+    <div className="min-w-[230px]  max-w-[300px] max-h-[350px] bg-white shadow-md hover:shadow-xl transition-shadow dark:bg-gray-950 px-4 py-8  border-t-2 ">
       <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-50">
         {highlightText(title, characterSearchQuery)}
         {/* {title} */}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
-      <div className="mt-4 flex items-center gap-2">
+      <div className=" flex-col  md:flex-row mt-4 flex items-center gap-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button
