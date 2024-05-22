@@ -23,4 +23,10 @@ type Storypoints {
       required title:str;
       description:str;
 }
+
+type UserBooks {
+      required userId : str;
+      required storyId :str;
+}
+
 }

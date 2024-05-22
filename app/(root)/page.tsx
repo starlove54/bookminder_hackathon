@@ -3,7 +3,7 @@ import Card from '../Components/Card'
 import Plus from '../Components/Plus'
 import CharacterCard from '../Components/CharacterCard'
 import { useEffect, useState } from 'react'
-import bookItems from '../bookItems.json'
+// import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
@@ -18,8 +18,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { checkUserExists, createStory, createStory1, createStoryTitle, deleteStory, getStories, getStoryById } from '../api/stories'
-import { Book, Character, StoryPoint } from '@/variables'
+import { addCharacterToStory, addStoryPointToStory, checkUserExists, createStoryTitle, deleteCharacterFromStory, deleteStory, deleteStoryPointFromStory, getStories, getStoriesComplete, getStoryById } from '../api/stories'
+import { Book, BookDatatable, Character, StoryPoint } from '@/variables'
 import { resolve } from 'path'
 import { rejects } from 'assert'
 import { Label } from '@/components/ui/label'
@@ -33,7 +33,7 @@ import {
 
 
 export default function Home() {
-  const [books, setBook] = useState<Book[]>(bookItems)
+  const [books, setBook] = useState<Book[]>([])
   const [selectedBookId, setSelectedBookId] = useState('1')
   const [storiesSearchQuery, setStoriesSearchQuery] = useState<string>('')
   const [characterSearchQuery, setCharacterSearchQuery] = useState<string>('')
@@ -71,11 +71,18 @@ export default function Home() {
     setSelectedBookId(id)
   }
 
-async function storiesList() {
-  const list = await getStories();
-  console.log(list);
-  return list;
-}
+  async function storiesList() {
+    const list = await getStoriesComplete();
+    // const storyid = 'dfb54a96-1867-11ef-bdbc-87413e4c5c7e';
+    // const character :Character = {id:"12356",title:"negi anubhav",description:"good boy a"}
+    // const storyPoint :StoryPoint = {id:"1234",title:"cosmos",description:"universe"}
+    // const stroy = await createStoryTitle("hi there story");
+    console.log(list);
+    if (list) {
+      const booksData = toBookDatatableArray(list)
+      setBook(booksData)}
+    // return list;
+  }
   const addCharacter = () => {
     if (!newCharacterCardName.trim()) return // Prevent adding character with empty name
 
@@ -163,8 +170,8 @@ async function storiesList() {
     // If there's a search query, sort the filtered characters to show them at the top
     return query
       ? filteredCharacters.sort((a, b) =>
-          normalize(a.title).localeCompare(normalize(b.title))
-        )
+        normalize(a.title).localeCompare(normalize(b.title))
+      )
       : selectedBook.characters
   }
 
@@ -198,6 +205,7 @@ async function storiesList() {
 
   const handleAddNewStory = () => {
     setAddNewStory((prev) => !prev)
+    storiesList();
   }
 
   const deleteBook = (bookId: string) => {
@@ -208,6 +216,7 @@ async function storiesList() {
       // If deleted, set selectedBookId to the id of the first book in the updated array
       if (updatedBooks.length > 0) {
         setSelectedBookId(updatedBooks[0].id)
+        deleteStory(bookId);
       } else {
         // If no books left, reset selectedBookId to an empty string or any default value
         setSelectedBookId('')
@@ -218,6 +227,8 @@ async function storiesList() {
   const handleDeleteStoryPoint = (storyPointId: string) => {
     const updatedBooks = books.map((book) => {
       if (book.id === selectedBookId) {
+           //function to delete story point
+          deleteStoryPointFromStory(selectedBookId,storyPointId)
         return {
           ...book,
           storypoints: book.storypoints.filter(
@@ -305,30 +316,18 @@ async function storiesList() {
     setEditedStoryPointTitle(title)
     setEditedStoryPointDescription(description)
   }
+  function toBookDatatableArray(data: any[]): Book[] {
+    return data.map(item => ({
+      id: String(item.id),      // Ensuring id is a string
+      title: String(item.title), // Ensuring title is a string
+      characters: item.characters as Character[],
+      storypoints: item.storypoints as StoryPoint[]
+    }));
+  }
   useEffect(() => {
-    // const stryList = async () => {
-    //   const value = await getStories();
-    //   console.log(value);
-    //   return value
-    // }
-    // const value = getStories();
-    //const value = getStoryById("71e776ea-15df-11ef-9d0a-170b77b96e3f");
-    // const characters: Character[] = [
-    //   { title: 'Character 1', description: 'Description 1' ,id:''},
-    //   { title: 'Character 2',id:'' ,description: 'Description 2' }
-    // ];
-    
-    // const storypoints: StoryPoint[] = [
-    //   { title: 'Storypoint 1', description: 'Description 1' ,id:''},
-    //   { title: 'Storypoint 2',description: 'Description 2',id:'' }
-    // ];
-    // const value = createStory("test story12",characters,storypoints);
-    // //const value = deleteStory("71e776ea-15df-11ef-9d0a-170b77b96e3f");
-    // console.log(JSON.stringify(value, null, 2));
-    // console.log(value);
     const value = checkUserExists("testUser@bookminder.xyz")
-    console.log(value);
-  });
+    storiesList();
+  },);
 
   return (
     <main>
@@ -433,9 +432,8 @@ async function storiesList() {
                             <>
                               <Input
                                 type="text"
-                                className={`h-10 w-50 flex justify-center items-center border-none text-lg text-gray-500 ${
-                                  editingBookId === item.id ? 'bg-gray-100' : ''
-                                }`}
+                                className={`h-10 w-50 flex justify-center items-center border-none text-lg text-gray-500 ${editingBookId === item.id ? 'bg-gray-100' : ''
+                                  }`}
                                 value={editedBookTitle}
                                 onChange={(e) =>
                                   setEditedBookTitle(e.target.value)
@@ -475,11 +473,10 @@ async function storiesList() {
                             <>
                               <div
                                 key={item.id}
-                                className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-slate-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full  pt-4 h-full ${
-                                  selectedBookId === item.id
+                                className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-slate-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full  pt-4 h-full ${selectedBookId === item.id
                                     ? 'bg-slate-200 text-gray-500'
                                     : ''
-                                }`}
+                                  }`}
                                 onClick={() => readBook(item.id)}
                               >
                                 {item.title}
@@ -554,17 +551,15 @@ async function storiesList() {
           <div className="flex-1 overflow-auto p-6">
             <div className="flex gap-4 mb-4">
               <button
-                className={`text-xl rounded-full font-medium text-gray-500 hover:bg-slate-100 mb-2 dark:text-gray-50 px-4 py-2 ${
-                  activeTab === 'characters' ? 'bg-slate-200' : ''
-                }`}
+                className={`text-xl rounded-full font-medium text-gray-500 hover:bg-slate-100 mb-2 dark:text-gray-50 px-4 py-2 ${activeTab === 'characters' ? 'bg-slate-200' : ''
+                  }`}
                 onClick={() => setActiveTab('characters')}
               >
                 Characters
               </button>
               <button
-                className={`text-xl rounded-full font-medium hover:bg-slate-100 text-gray-500 mb-2 dark:text-gray-50 px-4 py-2 ${
-                  activeTab === 'storypoints' ? 'bg-slate-200' : ''
-                }`}
+                className={`text-xl rounded-full font-medium hover:bg-slate-100 text-gray-500 mb-2 dark:text-gray-50 px-4 py-2 ${activeTab === 'storypoints' ? 'bg-slate-200' : ''
+                  }`}
                 onClick={() => setActiveTab('storypoints')}
               >
                 StoryPoints
