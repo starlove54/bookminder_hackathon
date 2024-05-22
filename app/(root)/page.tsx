@@ -58,10 +58,16 @@ export default function Home() {
   const [editedStoryPointDescription, setEditedStoryPointDescription] =
     useState<string>('')
 
-  const [isLeftPanelOpen, setIsOpen] = useState(window.innerWidth >= 640)
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsLeftPanelOpen(window.innerWidth >= 640)
+    }
+  }, [])
 
   const togglePanel = () => {
-    setIsOpen(!isLeftPanelOpen)
+    setIsLeftPanelOpen(!isLeftPanelOpen)
   }
 
   const editBookTitle = (bookId: string, title: string) => {
