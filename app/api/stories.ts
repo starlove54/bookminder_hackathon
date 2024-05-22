@@ -4,7 +4,9 @@ import * as edgedb from "edgedb";
 import e from '../../dbschema/edgeql-js'
 import { Users } from "@/dbschema/interfaces";
 
-const client = edgedb.createClient();
+const client = edgedb.createClient({
+      
+});
 
 export async function getStories() {
       const stories = await client.query<Book>(`\
