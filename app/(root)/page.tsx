@@ -73,15 +73,10 @@ export default function Home() {
 
   async function storiesList() {
     const list = await getStoriesComplete();
-    // const storyid = 'dfb54a96-1867-11ef-bdbc-87413e4c5c7e';
-    // const character :Character = {id:"12356",title:"negi anubhav",description:"good boy a"}
-    // const storyPoint :StoryPoint = {id:"1234",title:"cosmos",description:"universe"}
-    // const stroy = await createStoryTitle("hi there story");
     console.log(list);
     if (list) {
       const booksData = toBookDatatableArray(list)
       setBook(booksData)}
-    // return list;
   }
   const addCharacter = () => {
     if (!newCharacterCardName.trim()) return // Prevent adding character with empty name
@@ -327,7 +322,7 @@ export default function Home() {
   useEffect(() => {
     const value = checkUserExists("testUser@bookminder.xyz")
     storiesList();
-  },);
+  },[]);
 
   return (
     <main>
