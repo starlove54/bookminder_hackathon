@@ -1,13 +1,11 @@
 'use client'
-import Card from '../Components/Card'
-import Plus from '../Components/Plus'
 import CharacterCard from '../Components/CharacterCard'
 import { useEffect, useState } from 'react'
 // import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
 import { highlightText } from '../Utilities/HighlightText'
 import { Button } from '@/components/ui/button'
-import { Edit, Trash2Icon, CircleX, CircleCheck } from 'lucide-react'
+import { Edit, Trash2Icon, CircleX, CircleCheck, Menu } from 'lucide-react'
 import {
   Dialog,
   DialogClose,
@@ -31,7 +29,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-
 export default function Home() {
   const [books, setBook] = useState<Book[]>([])
   const [selectedBookId, setSelectedBookId] = useState('1')
@@ -53,6 +50,18 @@ export default function Home() {
   const [editedStoryPointDescription, setEditedStoryPointDescription] =
     useState<string>('')
 
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsLeftPanelOpen(window.innerWidth >= 640)
+    }
+  }, [])
+
+  const togglePanel = () => {
+    setIsLeftPanelOpen(!isLeftPanelOpen)
+  }
+
   const editBookTitle = (bookId: string, title: string) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
@@ -72,11 +81,12 @@ export default function Home() {
   }
 
   async function storiesList() {
-    const list = await getStoriesComplete();
+  const list = await getStoriesComplete();
     console.log(list);
     if (list) {
       const booksData = toBookDatatableArray(list)
-      setBook(booksData)}
+      setBook(booksData)
+    }
   }
   const addCharacter = () => {
     if (!newCharacterCardName.trim()) return // Prevent adding character with empty name
@@ -196,6 +206,9 @@ export default function Home() {
 
     // Reset input field
     setNewBookTitle('')
+    if (!selectedBookId) {
+      setSelectedBookId(newBook.id)
+    }
   }
 
   const handleAddNewStory = () => {
@@ -326,20 +339,35 @@ export default function Home() {
 
   return (
     <main>
-      <div className=" flex flex-1 border-b   ">
-        <div className=" border-r min-w-[230px] max-w-[230px] sm:min-w-[230px] sm:max-w-[350px] bg-gray-50/40  sm:block dark:bg-gray-800/40 ">
-          <div className="flex h-full max-h-screen flex-col   sm:min-w-[350px] ">
+      <div className=" flex flex-1 justify-center  ">
+        <div className=" border-r  bg-gray-50/40    dark:bg-gray-800/40  ">
+          <div
+            className={`absolute left-panel  ${
+              isLeftPanelOpen ? 'open' : 'closed'
+            }  sm:relative w-[300px]   sm:flex sm:flex-col  sm:min-w-[240px] sm:max-w-[350px] md:w-[450px]  bg-white border-b border-r shadow-lg sm:shadow-none min-h-[400px] py-4 z-20 h-screen`}
+          >
+            <div
+              onClick={togglePanel}
+              className=" w-30 h-30 sm:hidden mx-6 my-4 relative cursor-pointer"
+            >
+              {isLeftPanelOpen ? (
+                <CircleX className="ml-auto opacity-65" />
+              ) : (
+                <Menu />
+              )}
+            </div>
+
             {/* Search input */}
-            <div className="flex h-[65px] items-center border-b justify-center bg-white shadow-sm dark:bg-gray-950 ">
-              <div className="flex items-center gap-2  font-semibold text-gray-600 dark:text-gray-50">
+            <div className="flex h-[65px] items-center  justify-center bg-white shadow-sm dark:bg-gray-950 ">
+              <div className="flex flex-col justify-center items-center sm:flex-row sm:items-center sm:justify-center gap-2  font-regular text-gray-600 dark:text-gray-50  ">
                 <span className="text-lg">My Stories</span>
                 <div className="flex justify-center items-center gap-1 max-w-[300px] ">
                   {/* <Search className=" w-5 h-5 text-gray-500" /> */}
                   <Input
                     value={storiesSearchQuery}
-                    placeholder={`🔍 Search your story...`}
+                    placeholder={`🔍 Search story`}
                     onChange={handleStoriesSearchInputChange}
-                    className="h-8 font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
+                    className="h-8  font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
                   />
 
                   {storiesSearchQuery.length > 0 && (
@@ -354,9 +382,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4   ">
-              <div className="left-panel text-wrap whitespace-normal px-4  ">
-                <div className="flex justify-center pb-1 pt-3   ">
+            <div className="flex-1 overflow-auto text-wrap whitespace-normal gap-4     ">
+              <div className="text-wrap whitespace-normal px-4 ">
+                <div className="flex justify-center pb-1 pt-3 mt-6  ">
                   {storiesSearchQuery.length === 0 && (
                     <Button
                       className="add-new-story-buton h-8 font-bold  text-gray-600 transition hover:scale-105"
@@ -407,7 +435,7 @@ export default function Home() {
                         {highlightText(item.title, storiesSearchQuery)}
                       </div>
                     ))}
-                  {filteredBooks.length === 0 && (
+                  {storiesSearchQuery && filteredBooks.length === 0 && (
                     <div className="text-gray-500 flex bg-gray-100 h-8  rounded-full   justify-center items-center ">
                       No results...
                     </div>
@@ -491,7 +519,7 @@ export default function Home() {
                                     <DialogTrigger asChild>
                                       <Trash2Icon className="w-4 h-4 opacity-55 hover:opacity-100" />
                                     </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[425px]">
+                                    <DialogContent className="flex flex-col justify-center items-center sm:max-w-[425px]">
                                       <DialogHeader>
                                         <DialogTitle>Delete</DialogTitle>
                                         <DialogDescription>
@@ -500,7 +528,7 @@ export default function Home() {
                                           {` ${item.title}`}
                                         </DialogDescription>
                                       </DialogHeader>
-                                      <DialogFooter>
+                                      <DialogFooter className=" flex gap-4 flex-col    sm:flex-row  ">
                                         <DialogClose asChild>
                                           <Button
                                             variant="outline"
@@ -533,18 +561,28 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-1 flex-col ">
-          <div className="flex h-16 items-center justify-between border-b bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40">
-            <div className="flex items-center gap-4  ">
-              <h1 className="text-3xl font-semibold text-gray-600 dark:text-gray-50">
-                {books.find((item) => item.id === selectedBookId)?.title}
-              </h1>
-            </div>
+        <div className="flex flex-1 flex-col">
+          <div
+            onClick={togglePanel}
+            className=" w-30 h-30 sm:hidden mx-6 my-4 relative cursor-pointer"
+          >
+            {!isLeftPanelOpen ? <Menu /> : ''}
+            {/* <Menu /> */}
+            {/* {isLeftPanelOpen ? (
+              <CircleX className="ml-auto opacity-65" />
+            ) : (
+              <Menu />
+            )} */}
+          </div>
+          <div className="text-center sm:flex h-20 items-center  sm:justify-start  bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40  pt-3 ">
+            <h1 className="text-3xl  font-semibold text-gray-600 dark:text-gray-50">
+              {books.find((item) => item.id === selectedBookId)?.title}
+              {books.length === 0 ? 'Add a story title' : ''}
+            </h1>
             {/* <div className="flex items-center gap-2">sdfsdfsdf</div> */}
           </div>
-
-          <div className="flex-1 overflow-auto p-6">
-            <div className="flex gap-4 mb-4">
+          <div className="flex-1 overflow-auto p-3 ">
+            <div className=" justify-center sm:justify-start flex gap-4 mb-4 ">
               <button
                 className={`text-xl rounded-full font-medium text-gray-500 hover:bg-slate-100 mb-2 dark:text-gray-50 px-4 py-2 ${activeTab === 'characters' ? 'bg-slate-200' : ''
                   }`}
@@ -562,16 +600,19 @@ export default function Home() {
             </div>
 
             {activeTab === 'characters' && (
-              <div className="character-tab p-4 ">
+              <div className="character-tab p-4  ">
                 <div>
                   <Dialog>
-                    <div className="flex  gap-4  ">
+                    <div className=" items-center sm:items-start flex flex-col  gap-4 justify-center sm:justify-start sm:flex-row">
                       <DialogTrigger asChild>
-                        <Button variant="outline" className="h-8 w-30 mb-4">
+                        <Button
+                          variant="outline"
+                          className="max-w-[200px] h-8 w-30 mb-4"
+                        >
                           Add character
                         </Button>
                       </DialogTrigger>
-                      <div className="flex  gap-1 max-w-[300px] ">
+                      <div className=" flex justify-center   max-w-[300px] ">
                         {/* <Search className=" w-5 h-5 text-gray-500" /> */}
                         <Input
                           value={characterSearchQuery}
@@ -590,7 +631,7 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="w-[350px] sm:max-w-[425px]">
                       <DialogHeader>
                         <DialogTitle className="text-2xl">
                           New character card
@@ -626,7 +667,7 @@ export default function Home() {
                           />
                         </div>
                       </div>
-                      <DialogFooter>
+                      <DialogFooter className="flex flex-col gap-2 sm:flex-row">
                         <DialogClose
                           disabled={newCharacterCardName.length === 0}
                         >
@@ -654,7 +695,7 @@ export default function Home() {
                   </Dialog>
                 </div>
                 {characterSearchQuery.length === 0 && (
-                  <div className=" grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-4 py-6  overflow-y-auto  max-h-screen">
+                  <div className="mt-10 gap-8 py-4 sm:grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:gap-8 md:gap-6 lg:gap-4 sm:px-4 sm:py-6 overflow-y-auto sm:max-h-screen justify-center   flex flex-row flex-wrap">
                     {books
                       .find((item) => item.id === selectedBookId)
                       ?.characters.map((character) => (
@@ -671,7 +712,7 @@ export default function Home() {
                   </div>
                 )}
                 {characterSearchQuery.length > 0 && (
-                  <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+                  <div className="mt-10 gap-8 py-4 sm:grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:gap-8 md:gap-6 lg:gap-4 sm:px-4 sm:py-6 overflow-y-auto sm:max-h-screen justify-center sm:border-2 flex flex-row flex-wrap">
                     {getFilteredCharacters().map((character) => (
                       <CharacterCard
                         key={character.id}
@@ -814,7 +855,6 @@ export default function Home() {
                         </div>
                       ))}
                   </div>
-
                   <div className="ml-6">
                     <Dialog>
                       <DialogTrigger asChild>
