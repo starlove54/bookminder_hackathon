@@ -1,4 +1,4 @@
-//id: aab3a0be-15dc-11ef-b93a-039e50a122f6
+//id: "80ba37a8-193a-11ef-a25d-17fbb82c6d6d"
 insert Users {
   email := "testUser@bookminder.xyz",
   username := "testUser",
