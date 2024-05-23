@@ -4,6 +4,9 @@ export type Book = {
       characters: Character[]
       storypoints: StoryPoint[]
 }
+export type BookDatatable = {
+      id:string,title:string
+}
 
 export type StoryPoint = {
       id: string
