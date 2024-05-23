@@ -222,9 +222,7 @@ export default function Home() {
 
     // Reset input field
     setNewBookTitle('')
-    if (!selectedBookId) {
-      setSelectedBookId(newBook.id)
-    }
+    setSelectedBookId(newBook.id)
   }
 
   const handleAddNewStory = () => {
@@ -388,7 +386,7 @@ export default function Home() {
                 <span className="text-lg">My Stories</span>
                 <div className="flex justify-center items-center gap-1 max-w-[300px] ">
                   {/* <Search className=" w-5 h-5 text-gray-500" /> */}
-                  {books.length > 0 && (
+                  {books.length > 1 && (
                     <Input
                       value={storiesSearchQuery}
                       placeholder={`🔍 Search story`}
