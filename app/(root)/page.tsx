@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { addCharacterToStory, addStoryPointToStory, checkUserExists, createStoryTitle, deleteCharacterFromStory, deleteStory, deleteStoryPointFromStory, getStories, getStoriesComplete, getStoryById } from '../api/stories'
+import { addCharacterToStory, addStoryPointToStory, checkUserExists, createStoryTitle, deleteCharacterFromStory, deleteStory, deleteStoryPointFromStory, getStories, getStoriesComplete, getStoryById, updateStoryCharacter, updateStoryStoryPoint, updateStoryTitle } from '../api/stories'
 import { Book, BookDatatable, Character, StoryPoint } from '@/variables'
 import { resolve } from 'path'
 import { rejects } from 'assert'
@@ -31,6 +31,7 @@ import {
 
 export default function Home() {
   const [books, setBook] = useState<Book[]>([])
+  const [userId,setuserId] = useState<string>('');
   const [selectedBookId, setSelectedBookId] = useState('1')
   const [storiesSearchQuery, setStoriesSearchQuery] = useState<string>('')
   const [characterSearchQuery, setCharacterSearchQuery] = useState<string>('')
@@ -62,17 +63,21 @@ export default function Home() {
     setIsLeftPanelOpen(!isLeftPanelOpen)
   }
 
-  const editBookTitle = (bookId: string, title: string) => {
-    const updatedBooks = books.map((book) => {
+  const editBookTitle = async (bookId: string, title: string) => {
+    const updatedBooks = books.map(async (book) => {
       if (book.id === bookId) {
+        //add loader here sample similar in all functions
+        await updateStoryTitle(bookId, title);
+        //end loader here
         return {
           ...book,
           title: title,
         }
       }
       return book
-    })
-    setBook(updatedBooks)
+    });
+    const resolvedBooks = await Promise.all(updatedBooks);
+    setBook(resolvedBooks);
     setEditingBookId(null) // Exit editing mode
   }
 
@@ -80,61 +85,68 @@ export default function Home() {
     setSelectedBookId(id)
   }
 
-  async function storiesList() {
-  const list = await getStoriesComplete();
-    console.log(list);
+  async function storiesList(id:string) {
+    const list = await getStoriesComplete(id);
     if (list) {
       const booksData = toBookDatatableArray(list)
       setBook(booksData)
     }
   }
-  const addCharacter = () => {
+  const addCharacter = async () => {
     if (!newCharacterCardName.trim()) return // Prevent adding character with empty name
 
     const selectedBookIndex = books.findIndex(
       (book) => book.id === selectedBookId
     )
     if (selectedBookIndex !== -1) {
-      const newCharacter: Character = {
-        id: crypto.randomUUID(),
-        title: newCharacterCardName,
-        description: newCharacterCardDescription,
+      const value: { id: string; } | undefined | null = await addCharacterToStory(selectedBookId, newCharacterCardName, newCharacterCardDescription);
+      if (value && value !== undefined) {
+        const newCharacter: Character = {
+          id: value.id,
+          title: newCharacterCardName,
+          description: newCharacterCardDescription,
+        }
+        const updatedBooks = [...books]
+        updatedBooks[selectedBookIndex].characters.push(newCharacter)
+        setBook(updatedBooks)
+
+        // Reset input values after adding character
+        setnewCharacterCardName('')
+        setnewCharacterCardDescription('')
       }
 
-      const updatedBooks = [...books]
-      updatedBooks[selectedBookIndex].characters.push(newCharacter)
-      setBook(updatedBooks)
-
-      // Reset input values after adding character
-      setnewCharacterCardName('')
-      setnewCharacterCardDescription('')
     }
   }
 
-  const addStorypoint = () => {
+  const addStorypoint = async () => {
     if (!newStorypointTitle.trim()) return // Prevent adding character with empty name
 
     const selectedBookIndex = books.findIndex(
       (book) => book.id === selectedBookId
     )
     if (selectedBookIndex !== -1) {
-      const newStorypoint: StoryPoint = {
-        id: crypto.randomUUID(),
-        title: newStorypointTitle,
-        description: newStorypointDescription,
+      const value: { id: string; } | undefined | null = await addStoryPointToStory(selectedBookId, newStorypointTitle, newStorypointDescription);
+      if (value && value !== undefined) {
+        const newStorypoint: StoryPoint = {
+          id: value.id,
+          title: newStorypointTitle,
+          description: newStorypointDescription,
+        }
+
+        const updatedBooks = [...books]
+        updatedBooks[selectedBookIndex].storypoints.push(newStorypoint)
+        setBook(updatedBooks)
+
+        // Reset input values after adding character
+        setNewStorypointTitle('')
+        setNewStorypointDescription('')
       }
 
-      const updatedBooks = [...books]
-      updatedBooks[selectedBookIndex].storypoints.push(newStorypoint)
-      setBook(updatedBooks)
-
-      // Reset input values after adding character
-      setNewStorypointTitle('')
-      setNewStorypointDescription('')
     }
   }
 
   const removeCharacter = (bookId: string, characterCardKey: string) => {
+    deleteCharacterFromStory(bookId, characterCardKey);
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
         return {
@@ -187,33 +199,36 @@ export default function Home() {
       .includes(storiesSearchQuery.replace(/\s/g, '').toLowerCase())
   )
 
-  const addNewBook = () => {
+  const addNewBook = async () => {
     if (newBookTitle.trim() === '') {
       setAddNewStory(false)
       return // Prevent adding empty title
     }
-
-    const newBook: Book = {
-      // Create new book object
-      id: crypto.randomUUID(),
-      title: newBookTitle,
-      characters: [],
-      storypoints: [],
-    }
-
-    const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
-    setBook(updatedBooks) // Update books state
-
-    // Reset input field
+    const storyId: { id: string; } | undefined = await createStoryTitle(newBookTitle);
+    if (storyId) {
+      const newBook: Book = {
+        // Create new book object
+        id: storyId.id,
+        title: newBookTitle,
+        characters: [],
+        storypoints: [],
+      }
+      const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+      setBook(updatedBooks) // Update books state
+          // Reset input field
     setNewBookTitle('')
     if (!selectedBookId) {
       setSelectedBookId(newBook.id)
     }
+    }
   }
 
-  const handleAddNewStory = () => {
+  const handleAddNewStory =async () => {
+//temp function
+  // const value = await getStoriesCompleteQuery(userId)
+  const value1 = await getStoriesComplete_v1(userId)
     setAddNewStory((prev) => !prev)
-    storiesList();
+   // storiesList();
   }
 
   const deleteBook = (bookId: string) => {
@@ -235,8 +250,8 @@ export default function Home() {
   const handleDeleteStoryPoint = (storyPointId: string) => {
     const updatedBooks = books.map((book) => {
       if (book.id === selectedBookId) {
-           //function to delete story point
-          deleteStoryPointFromStory(selectedBookId,storyPointId)
+        //function to delete story point
+        deleteStoryPointFromStory(selectedBookId, storyPointId)
         return {
           ...book,
           storypoints: book.storypoints.filter(
@@ -269,6 +284,8 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
+
+        updateStoryCharacter(characterId,newTitle,newDescription);
         const updatedCharacters = book.characters.map((character) => {
           if (character.id === characterId) {
             return {
@@ -299,6 +316,7 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
+        updateStoryStoryPoint(storypointId,newTitle,newDescription);
         const updatedStorypoints = book.storypoints.map((storypoint) => {
           if (storypoint.id === storypointId) {
             return {
@@ -333,18 +351,27 @@ export default function Home() {
     }));
   }
   useEffect(() => {
-    const value = checkUserExists("testUser@bookminder.xyz")
-    storiesList();
-  },[]);
+    
+ const getUser = async ()=>{
+  // to check case if user dont exist : add any user otehr then mentioned in string below
+  const value =await checkUserExists("testUser@bookminder.xyz");
+  const user = await Promise.all(value);
+  if(user.length>0)
+    {
+      setuserId(user[0].id)
+      storiesList(user[0].id);
+    }
+ }
+ getUser();
+  }, []);
 
   return (
     <main>
       <div className=" flex flex-1 justify-center  ">
         <div className=" border-r  bg-gray-50/40    dark:bg-gray-800/40  ">
           <div
-            className={`absolute left-panel  ${
-              isLeftPanelOpen ? 'open' : 'closed'
-            }  sm:relative w-[300px]   sm:flex sm:flex-col  sm:min-w-[240px] sm:max-w-[350px] md:w-[450px]  bg-white border-b border-r shadow-lg sm:shadow-none min-h-[400px] py-4 z-20 h-screen`}
+            className={`absolute left-panel  ${isLeftPanelOpen ? 'open' : 'closed'
+              }  sm:relative w-[300px]   sm:flex sm:flex-col  sm:min-w-[240px] sm:max-w-[350px] md:w-[450px]  bg-white border-b border-r shadow-lg sm:shadow-none min-h-[400px] py-4 z-20 h-screen`}
           >
             <div
               onClick={togglePanel}
@@ -497,8 +524,8 @@ export default function Home() {
                               <div
                                 key={item.id}
                                 className={`flex items-center flex-row  rounded-lg px-4 py-2 text-gray-500 transition-all hover:bg-slate-100 hover:text-gray-900 text-lg dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50 cursor-pointer  overflow-hidden w-full  pt-4 h-full ${selectedBookId === item.id
-                                    ? 'bg-slate-200 text-gray-500'
-                                    : ''
+                                  ? 'bg-slate-200 text-gray-500'
+                                  : ''
                                   }`}
                                 onClick={() => readBook(item.id)}
                               >

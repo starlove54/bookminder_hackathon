@@ -12,6 +12,7 @@ type Stories {
     required title: str;
     multi characters: Characters;
     multi storypoints:Storypoints;
+    required user:Users
 }
 
 type Characters {
