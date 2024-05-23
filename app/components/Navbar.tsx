@@ -5,15 +5,15 @@ import BookIcon from './BookIcon'
 const Navbar = () => {
   return (
     // <div className="flex h-screen w-full flex-col">
-    <nav className=" flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-      <div className="flex items-center gap-4">
+    <nav className=" flex h-16 items-center justify-between border-b bg-white px-6 shadow-lg dark:border-gray-800 dark:bg-gray-950 py-6">
+      <div className="flex items-center ">
         <Link
-          className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-50"
+          className="flex items-center gap-2 sm:gap-4 font-semibold text-gray-900 dark:text-gray-50"
           href="/"
         >
           {/* <BookIcon className="h-6 w-6" /> */}
           <BookIcon />
-          <span>BookMinder</span>
+          <span className="text-md sm:text-lg  xl:text-xl">BookMinder</span>
         </Link>
       </div>
       <div className="flex items-center gap-4">
@@ -25,7 +25,8 @@ const Navbar = () => {
             <SearchIcon className="h-4 w-4" />
             <span className="sr-only">Search</span>
           </Button> */}
-        SignIn
+        <span className="text-md sm:text-lg  xl:text-xl">SignIn</span>
+
         {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
