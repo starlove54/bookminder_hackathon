@@ -388,12 +388,14 @@ export default function Home() {
                 <span className="text-lg">My Stories</span>
                 <div className="flex justify-center items-center gap-1 max-w-[300px] ">
                   {/* <Search className=" w-5 h-5 text-gray-500" /> */}
-                  <Input
-                    value={storiesSearchQuery}
-                    placeholder={`🔍 Search story`}
-                    onChange={handleStoriesSearchInputChange}
-                    className="h-8  font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
-                  />
+                  {books.length > 0 && (
+                    <Input
+                      value={storiesSearchQuery}
+                      placeholder={`🔍 Search story`}
+                      onChange={handleStoriesSearchInputChange}
+                      className="h-8  font-small border-b-1 border-t-0 border-l-0 border-r-0 rounded-none"
+                    />
+                  )}
 
                   {storiesSearchQuery.length > 0 && (
                     <CircleX
