@@ -184,15 +184,19 @@ export async function deleteStory(storyId: string) {
       }
 }
 
-export async function createStoryTitle(title: string) {
+export async function createStoryTitle(title: string,userId:string) {
       try {
-            // Build the query
-            const query = e.insert(e.Stories, {
-                  title: title
-            })
 
-            // Execute the query with parameters
-            return await query.run(client);
+
+            const stories = await client.query<Book>(`\
+            WITH user := (
+                  SELECT Users
+                  FILTER .id = <uuid>'${userId}'
+              )
+              INSERT Stories {
+                  title := '${title}',
+                  user := user
+              } unless conflict on .title`)
       } catch (error) {
             console.error('Error creating story:', error);
       }
