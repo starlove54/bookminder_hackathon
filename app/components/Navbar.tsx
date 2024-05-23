@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import React from 'react'
 import BookIcon from './BookIcon'
-
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 const Navbar = () => {
   return (
     // <div className="flex h-screen w-full flex-col">
@@ -25,7 +31,13 @@ const Navbar = () => {
             <SearchIcon className="h-4 w-4" />
             <span className="sr-only">Search</span>
           </Button> */}
-        <span className="text-md sm:text-lg  xl:text-xl">SignIn</span>
+        {/* </SignedIn>
+          <UserButton />
+        </SignedIn>\ */}
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        {/* <span className="text-md sm:text-lg  xl:text-xl">SignIn</span> */}
 
         {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
