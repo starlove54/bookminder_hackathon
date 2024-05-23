@@ -4,6 +4,13 @@ import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import { Poppins } from 'next/font/google'
 import Header from './Components/Header'
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -22,15 +29,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} `}>
-        <Header />
-        <div className=" flex  w-full flex-col h-screen   ">
-          <Navbar />
-          <main className="flex-grow overflow-y-auto   ">{children}</main>
-        </div>
-        {/* <Footer /> */}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${poppins.variable} `}>
+          <Header />
+          <div className=" flex  w-full flex-col h-screen   ">
+            <Navbar />
+            <main className="flex-grow overflow-y-auto   ">{children}</main>
+          </div>
+          {/* <Footer /> */}
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
