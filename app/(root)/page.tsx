@@ -92,15 +92,18 @@ export default function Home() {
   }
 
   const storiesList = useCallback(async () => {
-    const list = await getStoriesComplete()
-    // console.log(list)
-    if (list) {
-      const booksData = toBookDatatableArray(list)
-      setBook(booksData)
-      // Set the selectedBookId to the id of the first story
-      setSelectedBookId(booksData[0].id)
+    try {
+      const list = await getStoriesComplete()
+      if (list && list.length > 0) {
+        const booksData = toBookDatatableArray(list)
+        setBook(booksData)
+        setSelectedBookId(booksData[0].id)
+      }
+    } catch (error) {
+      console.error('Failed to fetch stories', error)
     }
   }, [])
+
   const addCharacter = () => {
     if (!newCharacterCardName.trim()) return // Prevent adding character with empty name
 
@@ -346,8 +349,17 @@ export default function Home() {
     }))
   }
   useEffect(() => {
-    const value = checkUserExists('testUser@bookminder.xyz')
-    storiesList()
+    const checkAndFetchStories = async () => {
+      try {
+        const userExists = await checkUserExists('testUser@bookminder.xyz')
+        if (userExists) {
+          await storiesList()
+        }
+      } catch (error) {
+        console.error('User check failed', error)
+      }
+    }
+    checkAndFetchStories()
   }, [storiesList])
 
   return (
@@ -729,7 +741,7 @@ export default function Home() {
                   </div>
                 )}
                 {characterSearchQuery.length > 0 && (
-                  <div className="mt-10 gap-8 py-4 sm:grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:gap-8 md:gap-6 lg:gap-4 sm:px-4 sm:py-6 overflow-y-auto sm:max-h-screen justify-center sm:border-2 flex flex-row flex-wrap">
+                  <div className="mt-10 gap-8 py-4 sm:grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:gap-8 md:gap-6 lg:gap-4 sm:px-4 sm:py-6 overflow-y-auto sm:max-h-screen justify-center  flex flex-row flex-wrap">
                     {getFilteredCharacters().map((character) => (
                       <CharacterCard
                         key={character.id}
