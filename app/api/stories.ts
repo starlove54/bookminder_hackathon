@@ -25,22 +25,24 @@ export async function getStories() {
       return stories;
 }
 
-export async function getStoriesComplete() {
+
+export async function getStoriesComplete(userId:string) {
       const story = await client.query<Book>(`\
-      select Stories {
-      id,
-      title,
-      characters : {
-            id,title, description
-      },
-      storypoints : {
-            id,title, description
-      }
-      }
+      SELECT Stories {
+            id,
+            title,
+            characters : {
+                  id,title, description
+            },
+            storypoints : {
+                  id,title, description
+            }
+          } FILTER .user.id = <uuid>'${userId}';
       
       ;`)
       return story;
 }
+
 
 export async function getStoryById(id: string) {
       const story = await client.query<Book>(`\
@@ -182,17 +184,36 @@ export async function deleteStory(storyId: string) {
       }
 }
 
-export async function createStoryTitle(title: string) {
+export async function createStoryTitle(title: string,userId:string) {
       try {
-            // Build the query
-            const query = e.insert(e.Stories, {
-                  title: title
-            })
 
-            // Execute the query with parameters
-            return await query.run(client);
+
+            const stories = await client.query<Book>(`\
+            WITH user := (
+                  SELECT Users
+                  FILTER .id = <uuid>'${userId}'
+              )
+              INSERT Stories {
+                  title := '${title}',
+                  user := user
+              } unless conflict on .title`)
       } catch (error) {
             console.error('Error creating story:', error);
+      }
+}
+export async function updateStoryTitle(id:string,title:string)
+{
+      try{
+            const query = e.update(e.Stories , () =>({
+                  filter_single :{id:id},
+                  set:{
+                        title :title
+                  }
+            }))
+            return await query.run(client);
+      }
+      catch{
+            console.log("server Error");
       }
 }
 export async function updateStory(id:string,title:string,description:string)
@@ -211,7 +232,7 @@ export async function updateStory(id:string,title:string,description:string)
             console.log("server Error");
       }
 }
-export async function updateStoryPoint(id:string,title:string,description:string)
+export async function updateStoryStoryPoint(id:string,title:string,description:string)
 {
       try{
             const query = e.update(e.Storypoints , () =>({
@@ -227,7 +248,7 @@ export async function updateStoryPoint(id:string,title:string,description:string
             console.log("server Error");
       } 
 }
-export async function updateCharacter(id:string,title:string,description:string)
+export async function updateStoryCharacter(id:string,title:string,description:string)
 {
       try{
             const query = e.update(e.Characters , () =>({
@@ -243,10 +264,10 @@ export async function updateCharacter(id:string,title:string,description:string)
             console.log("server Error");
       }
 }
-
 export async function checkUserExists(email: string) {
       const user = await client.query<Users>(`\
       select Users {
+            id,
             fname,
             username
       }
@@ -254,4 +275,22 @@ export async function checkUserExists(email: string) {
       `)
       return user;
 }
-
+export async function addNewUser(email:string,userName:string,password?:string,fname?:string,lName?:string)
+{
+      try {
+            // Build the query
+            const query = e.insert(e.Users, {
+                  email: email,
+                  username:userName,
+                  password:(password?password:""),
+                  fname:(fname?fname:""),
+                  lname:(lName?lName:"")
+            }).unlessConflict(user =>({
+                  on:user.email
+            }));
+            // Execute the query with parameters
+            return await query.run(client);
+      } catch (error) {
+            console.error('Error creating story:', error);
+      }
+}
