@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
 import {
   addCharacterToStory,
   addStoryPointToStory,
@@ -31,6 +32,7 @@ import {
   updateStoryStoryPoint,
   updateStoryTitle,
 } from '../api/stories'
+
 import { Book, BookDatatable, Character, StoryPoint } from '@/variables'
 import { resolve } from 'path'
 import { rejects } from 'assert'
@@ -46,7 +48,9 @@ import { SkeletonCard } from '../Utilities/SkeletonCard'
 
 export default function Home() {
   const [books, setBook] = useState<Book[]>([])
+
   const [userId, setuserId] = useState<string>('')
+
   const [selectedBookId, setSelectedBookId] = useState('1')
   const [storiesSearchQuery, setStoriesSearchQuery] = useState<string>('')
   const [characterSearchQuery, setCharacterSearchQuery] = useState<string>('')
@@ -84,6 +88,7 @@ export default function Home() {
       if (book.id === bookId) {
         //add loader here sample similar in all functions
         await updateStoryTitle(bookId, title)
+
         //end loader here
         return {
           ...book,
@@ -94,6 +99,7 @@ export default function Home() {
     })
     const resolvedBooks = await Promise.all(updatedBooks)
     setBook(resolvedBooks)
+
     setEditingBookId(null) // Exit editing mode
   }
 
@@ -101,8 +107,10 @@ export default function Home() {
     setSelectedBookId(id)
   }
 
+
   const storiesList = useCallback(async (id: string) => {
     setIsLoadingStories(true)
+
     try {
       const list = await getStoriesComplete(id)
       if (list && list.length > 0) {
@@ -130,6 +138,7 @@ export default function Home() {
           newCharacterCardName,
           newCharacterCardDescription
         )
+
       if (value && value !== undefined) {
         const newCharacter: Character = {
           id: value.id,
@@ -144,6 +153,7 @@ export default function Home() {
         setnewCharacterCardName('')
         setnewCharacterCardDescription('')
       }
+
     }
   }
 
@@ -154,12 +164,14 @@ export default function Home() {
       (book) => book.id === selectedBookId
     )
     if (selectedBookIndex !== -1) {
+
       const value: { id: string } | undefined | null =
         await addStoryPointToStory(
           selectedBookId,
           newStorypointTitle,
           newStorypointDescription
         )
+
       if (value && value !== undefined) {
         const newStorypoint: StoryPoint = {
           id: value.id,
@@ -171,15 +183,19 @@ export default function Home() {
         updatedBooks[selectedBookIndex].storypoints.push(newStorypoint)
         setBook(updatedBooks)
 
+
         // Reset input values after adding character
         setNewStorypointTitle('')
         setNewStorypointDescription('')
       }
+
     }
   }
 
   const removeCharacter = (bookId: string, characterCardKey: string) => {
+
     deleteCharacterFromStory(bookId, characterCardKey)
+
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
         return {
@@ -220,8 +236,8 @@ export default function Home() {
     // If there's a search query, sort the filtered characters to show them at the top
     return query
       ? filteredCharacters.sort((a, b) =>
-          normalize(a.title).localeCompare(normalize(b.title))
-        )
+        normalize(a.title).localeCompare(normalize(b.title))
+      )
       : selectedBook.characters
   }
 
@@ -237,10 +253,12 @@ export default function Home() {
       setAddNewStory(false)
       return // Prevent adding empty title
     }
+
     const storyId: { id: string } | undefined = await createStoryTitle(
       newBookTitle,
       userId
     )
+
     if (storyId) {
       const newBook: Book = {
         // Create new book object
@@ -318,7 +336,9 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
+
         updateStoryCharacter(characterId, newTitle, newDescription)
+
         const updatedCharacters = book.characters.map((character) => {
           if (character.id === characterId) {
             return {
@@ -349,7 +369,9 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
+
         updateStoryStoryPoint(storypointId, newTitle, newDescription)
+
         const updatedStorypoints = book.storypoints.map((storypoint) => {
           if (storypoint.id === storypointId) {
             return {
@@ -389,10 +411,12 @@ export default function Home() {
       try {
         const userExists = await checkUserExists('testUser@bookminder.xyz')
 
+
         const user = await Promise.all(userExists)
         if (user.length > 0) {
           setuserId(user[0].id)
           storiesList(user[0].id)
+
         }
       } catch (error) {
         console.error('User check failed', error)
@@ -405,11 +429,13 @@ export default function Home() {
 
   return (
     <main>
+
       <div className=" flex flex-1 justify-center ">
         {isLoadingStories ? (
           <SkeletonCard />
         ) : (
           <div className=" border-r-0  px-2 bg-gray-50/40   dark:bg-gray-800/40  ">
+
             <div
               className={`absolute left-panel  ${
                 isLeftPanelOpen ? 'open' : 'closed'
@@ -521,6 +547,7 @@ export default function Home() {
                             orientation="horizontal"
                           />
                         )} */}
+
                           <div className="flex flex-row justify-start items-center gap-2  ">
                             {editingBookId === item.id ? (
                               <>
@@ -534,6 +561,7 @@ export default function Home() {
                                   value={editedBookTitle}
                                   onChange={(e) =>
                                     setEditedBookTitle(e.target.value)
+
                                   }
                                   placeholder={
                                     editedBookTitle.trim() !== ''
@@ -561,11 +589,13 @@ export default function Home() {
                                   }}
                                   autoFocus // Automatically focuses the input field
                                 />
+
                                 <div className="ml-auto">
                                   <CircleCheck
                                     color="rgb(107 114 128)"
                                     height={22}
                                     width={22}
+
                                   />
                                 </div>
                               </>
@@ -641,6 +671,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+
         )}
         <div className="flex flex-1 flex-col ">
           {isLoadingStories ? (
@@ -650,6 +681,7 @@ export default function Home() {
               <div
                 onClick={togglePanel}
                 className=" w-30 h-30 sm:hidden mx-6 my-4 relative cursor-pointer"
+
               >
                 {!isLeftPanelOpen ? <Menu /> : ''}
               </div>
