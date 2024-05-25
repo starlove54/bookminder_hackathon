@@ -107,7 +107,6 @@ export default function Home() {
     setSelectedBookId(id)
   }
 
-
   const storiesList = useCallback(async (id: string) => {
     setIsLoadingStories(true)
 
@@ -153,7 +152,6 @@ export default function Home() {
         setnewCharacterCardName('')
         setnewCharacterCardDescription('')
       }
-
     }
   }
 
@@ -164,7 +162,6 @@ export default function Home() {
       (book) => book.id === selectedBookId
     )
     if (selectedBookIndex !== -1) {
-
       const value: { id: string } | undefined | null =
         await addStoryPointToStory(
           selectedBookId,
@@ -183,17 +180,14 @@ export default function Home() {
         updatedBooks[selectedBookIndex].storypoints.push(newStorypoint)
         setBook(updatedBooks)
 
-
         // Reset input values after adding character
         setNewStorypointTitle('')
         setNewStorypointDescription('')
       }
-
     }
   }
 
   const removeCharacter = (bookId: string, characterCardKey: string) => {
-
     deleteCharacterFromStory(bookId, characterCardKey)
 
     const updatedBooks = books.map((book) => {
@@ -236,8 +230,8 @@ export default function Home() {
     // If there's a search query, sort the filtered characters to show them at the top
     return query
       ? filteredCharacters.sort((a, b) =>
-        normalize(a.title).localeCompare(normalize(b.title))
-      )
+          normalize(a.title).localeCompare(normalize(b.title))
+        )
       : selectedBook.characters
   }
 
@@ -248,32 +242,68 @@ export default function Home() {
       .includes(storiesSearchQuery.replace(/\s/g, '').toLowerCase())
   )
 
+  // const addNewBook = async () => {
+  //   if (newBookTitle.trim() === '') {
+  //     setAddNewStory(false)
+  //     return // Prevent adding empty title
+  //   }
+  //   const storyId: { id: string } | undefined = await createStoryTitle(
+  //     newBookTitle,
+  //     userId
+  //   )
+  //   if (storyId) {
+  //     const newBook: Book = {
+  //       // Create new book object
+  //       id: storyId.id,
+  //       title: newBookTitle,
+  //       characters: [],
+  //       storypoints: [],
+  //     }
+  //     const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+  //     setBook(updatedBooks) // Update books state
+  //     // Reset input field
+  //     setNewBookTitle('')
+  //     if (!selectedBookId) {
+  //       setSelectedBookId(newBook.id)
+  //     }
+  //   }
+  // }
+
   const addNewBook = async () => {
     if (newBookTitle.trim() === '') {
       setAddNewStory(false)
       return // Prevent adding empty title
     }
+    try {
+      const storyId: { id: string } | undefined = await createStoryTitle(
+        newBookTitle,
+        userId
+      )
+      if (storyId) {
+        const newBook: Book = {
+          id: storyId.id,
+          title: newBookTitle,
+          characters: [],
+          storypoints: [],
+        }
+        const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+        setBook(updatedBooks) // Update books state
 
-    const storyId: { id: string } | undefined = await createStoryTitle(
-      newBookTitle,
-      userId
-    )
+        // Reset input field
+        setNewBookTitle('')
 
-    if (storyId) {
-      const newBook: Book = {
-        // Create new book object
-        id: storyId.id,
-        title: newBookTitle,
-        characters: [],
-        storypoints: [],
+        // Update selected book ID if none is selected
+        if (!selectedBookId) {
+          setSelectedBookId(newBook.id)
+        }
+      } else {
+        throw new Error('Failed to create story')
       }
-      const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
-      setBook(updatedBooks) // Update books state
-      // Reset input field
-      setNewBookTitle('')
-      if (!selectedBookId) {
-        setSelectedBookId(newBook.id)
-      }
+    } catch (error) {
+      console.error('Error adding new book:', error)
+      // Optionally, handle error state/UI updates
+    } finally {
+      setAddNewStory(false) // Ensure add new story state is reset
     }
   }
 
@@ -281,19 +311,30 @@ export default function Home() {
     setAddNewStory((prev) => !prev)
   }
 
-  const deleteBook = (bookId: string) => {
+  const handleDeleteStory = async (bookId: string) => {
+    // Filter the books array to remove the deleted story
     const updatedBooks = books.filter((item) => item.id !== bookId)
-    setBook(updatedBooks)
-    // Check if the currently selected book is deleted
-    if (selectedBookId === bookId) {
-      // If deleted, set selectedBookId to the id of the first book in the updated array
-      if (updatedBooks.length > 0) {
-        setSelectedBookId(updatedBooks[0].id)
-        deleteStory(bookId)
-      } else {
-        // If no books left, reset selectedBookId to an empty string or any default value
-        setSelectedBookId('')
+
+    try {
+      // Delete the story from the backend database
+      await deleteStory(bookId)
+
+      // Update the state with the filtered array
+      setBook(updatedBooks)
+
+      // Check if the currently selected book is deleted
+      if (selectedBookId === bookId) {
+        // If deleted, set selectedBookId to the id of the first book in the updated array
+        if (updatedBooks.length > 0) {
+          setSelectedBookId(updatedBooks[0].id)
+        } else {
+          // If no books left, reset selectedBookId to an empty string or any default value
+          setSelectedBookId('')
+        }
       }
+    } catch (error) {
+      console.error('Error deleting story:', error)
+      // Optionally, handle error state/UI updates
     }
   }
 
@@ -336,7 +377,6 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
-
         updateStoryCharacter(characterId, newTitle, newDescription)
 
         const updatedCharacters = book.characters.map((character) => {
@@ -369,7 +409,6 @@ export default function Home() {
   ) => {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
-
         updateStoryStoryPoint(storypointId, newTitle, newDescription)
 
         const updatedStorypoints = book.storypoints.map((storypoint) => {
@@ -411,12 +450,10 @@ export default function Home() {
       try {
         const userExists = await checkUserExists('testUser@bookminder.xyz')
 
-
         const user = await Promise.all(userExists)
         if (user.length > 0) {
           setuserId(user[0].id)
           storiesList(user[0].id)
-
         }
       } catch (error) {
         console.error('User check failed', error)
@@ -429,13 +466,11 @@ export default function Home() {
 
   return (
     <main>
-
       <div className=" flex flex-1 justify-center ">
         {isLoadingStories ? (
           <SkeletonCard />
         ) : (
           <div className=" border-r-0  px-2 bg-gray-50/40   dark:bg-gray-800/40  ">
-
             <div
               className={`absolute left-panel  ${
                 isLeftPanelOpen ? 'open' : 'closed'
@@ -561,7 +596,6 @@ export default function Home() {
                                   value={editedBookTitle}
                                   onChange={(e) =>
                                     setEditedBookTitle(e.target.value)
-
                                   }
                                   placeholder={
                                     editedBookTitle.trim() !== ''
@@ -595,7 +629,6 @@ export default function Home() {
                                     color="rgb(107 114 128)"
                                     height={22}
                                     width={22}
-
                                   />
                                 </div>
                               </>
@@ -642,7 +675,7 @@ export default function Home() {
                                               variant="outline"
                                               type="submit"
                                               onClick={() =>
-                                                deleteBook(item.id)
+                                                handleDeleteStory(item.id)
                                               }
                                             >
                                               Yes
@@ -671,7 +704,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         )}
         <div className="flex flex-1 flex-col ">
           {isLoadingStories ? (
@@ -681,14 +713,15 @@ export default function Home() {
               <div
                 onClick={togglePanel}
                 className=" w-30 h-30 sm:hidden mx-6 my-4 relative cursor-pointer"
-
               >
                 {!isLeftPanelOpen ? <Menu /> : ''}
               </div>
               <div className="text-center sm:flex h-20 items-center  sm:justify-start  bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40  pt-3 ">
                 <h1 className="text-3xl  font-semibold text-gray-600 dark:text-gray-50">
                   {books.find((item) => item.id === selectedBookId)?.title}
-                  {books.length === 0 ? 'Add a story title' : ''}
+                  {!isLoadingStories && books.length === 0
+                    ? 'Add a story title'
+                    : ''}
                 </h1>
                 {/* <div className="flex items-center gap-2">sdfsdfsdf</div> */}
               </div>
