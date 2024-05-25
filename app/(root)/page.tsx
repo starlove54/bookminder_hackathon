@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
 import {
   addCharacterToStory,
   addStoryPointToStory,
@@ -31,6 +32,7 @@ import {
   updateStoryStoryPoint,
   updateStoryTitle,
 } from '../api/stories'
+
 import { Book, BookDatatable, Character, StoryPoint } from '@/variables'
 import { resolve } from 'path'
 import { rejects } from 'assert'
@@ -46,7 +48,9 @@ import { SkeletonCard } from '../Utilities/SkeletonCard'
 
 export default function Home() {
   const [books, setBook] = useState<Book[]>([])
+
   const [userId, setuserId] = useState<string>('')
+
   const [selectedBookId, setSelectedBookId] = useState('1')
   const [storiesSearchQuery, setStoriesSearchQuery] = useState<string>('')
   const [characterSearchQuery, setCharacterSearchQuery] = useState<string>('')
@@ -84,6 +88,7 @@ export default function Home() {
       if (book.id === bookId) {
         //add loader here sample similar in all functions
         await updateStoryTitle(bookId, title)
+
         //end loader here
         return {
           ...book,
@@ -94,6 +99,7 @@ export default function Home() {
     })
     const resolvedBooks = await Promise.all(updatedBooks)
     setBook(resolvedBooks)
+
     setEditingBookId(null) // Exit editing mode
   }
 
@@ -103,6 +109,7 @@ export default function Home() {
 
   const storiesList = useCallback(async (id: string) => {
     setIsLoadingStories(true)
+
     try {
       const list = await getStoriesComplete(id)
       if (list && list.length > 0) {
@@ -130,6 +137,7 @@ export default function Home() {
           newCharacterCardName,
           newCharacterCardDescription
         )
+
       if (value && value !== undefined) {
         const newCharacter: Character = {
           id: value.id,
@@ -160,6 +168,7 @@ export default function Home() {
           newStorypointTitle,
           newStorypointDescription
         )
+
       if (value && value !== undefined) {
         const newStorypoint: StoryPoint = {
           id: value.id,
@@ -180,6 +189,7 @@ export default function Home() {
 
   const removeCharacter = (bookId: string, characterCardKey: string) => {
     deleteCharacterFromStory(bookId, characterCardKey)
+
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
         return {
@@ -368,6 +378,7 @@ export default function Home() {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
         updateStoryCharacter(characterId, newTitle, newDescription)
+
         const updatedCharacters = book.characters.map((character) => {
           if (character.id === characterId) {
             return {
@@ -399,6 +410,7 @@ export default function Home() {
     const updatedBooks = books.map((book) => {
       if (book.id === bookId) {
         updateStoryStoryPoint(storypointId, newTitle, newDescription)
+
         const updatedStorypoints = book.storypoints.map((storypoint) => {
           if (storypoint.id === storypointId) {
             return {
@@ -570,6 +582,7 @@ export default function Home() {
                             orientation="horizontal"
                           />
                         )} */}
+
                           <div className="flex flex-row justify-start items-center gap-2  ">
                             {editingBookId === item.id ? (
                               <>
@@ -610,6 +623,7 @@ export default function Home() {
                                   }}
                                   autoFocus // Automatically focuses the input field
                                 />
+
                                 <div className="ml-auto">
                                   <CircleCheck
                                     color="rgb(107 114 128)"
