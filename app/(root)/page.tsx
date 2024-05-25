@@ -232,30 +232,68 @@ export default function Home() {
       .includes(storiesSearchQuery.replace(/\s/g, '').toLowerCase())
   )
 
+  // const addNewBook = async () => {
+  //   if (newBookTitle.trim() === '') {
+  //     setAddNewStory(false)
+  //     return // Prevent adding empty title
+  //   }
+  //   const storyId: { id: string } | undefined = await createStoryTitle(
+  //     newBookTitle,
+  //     userId
+  //   )
+  //   if (storyId) {
+  //     const newBook: Book = {
+  //       // Create new book object
+  //       id: storyId.id,
+  //       title: newBookTitle,
+  //       characters: [],
+  //       storypoints: [],
+  //     }
+  //     const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+  //     setBook(updatedBooks) // Update books state
+  //     // Reset input field
+  //     setNewBookTitle('')
+  //     if (!selectedBookId) {
+  //       setSelectedBookId(newBook.id)
+  //     }
+  //   }
+  // }
+
   const addNewBook = async () => {
     if (newBookTitle.trim() === '') {
       setAddNewStory(false)
       return // Prevent adding empty title
     }
-    const storyId: { id: string } | undefined = await createStoryTitle(
-      newBookTitle,
-      userId
-    )
-    if (storyId) {
-      const newBook: Book = {
-        // Create new book object
-        id: storyId.id,
-        title: newBookTitle,
-        characters: [],
-        storypoints: [],
+    try {
+      const storyId: { id: string } | undefined = await createStoryTitle(
+        newBookTitle,
+        userId
+      )
+      if (storyId) {
+        const newBook: Book = {
+          id: storyId.id,
+          title: newBookTitle,
+          characters: [],
+          storypoints: [],
+        }
+        const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
+        setBook(updatedBooks) // Update books state
+
+        // Reset input field
+        setNewBookTitle('')
+
+        // Update selected book ID if none is selected
+        if (!selectedBookId) {
+          setSelectedBookId(newBook.id)
+        }
+      } else {
+        throw new Error('Failed to create story')
       }
-      const updatedBooks = [newBook, ...books] // Add new book to the beginning of the books array
-      setBook(updatedBooks) // Update books state
-      // Reset input field
-      setNewBookTitle('')
-      if (!selectedBookId) {
-        setSelectedBookId(newBook.id)
-      }
+    } catch (error) {
+      console.error('Error adding new book:', error)
+      // Optionally, handle error state/UI updates
+    } finally {
+      setAddNewStory(false) // Ensure add new story state is reset
     }
   }
 
@@ -263,19 +301,30 @@ export default function Home() {
     setAddNewStory((prev) => !prev)
   }
 
-  const deleteBook = (bookId: string) => {
+  const handleDeleteStory = async (bookId: string) => {
+    // Filter the books array to remove the deleted story
     const updatedBooks = books.filter((item) => item.id !== bookId)
-    setBook(updatedBooks)
-    // Check if the currently selected book is deleted
-    if (selectedBookId === bookId) {
-      // If deleted, set selectedBookId to the id of the first book in the updated array
-      if (updatedBooks.length > 0) {
-        setSelectedBookId(updatedBooks[0].id)
-        deleteStory(bookId)
-      } else {
-        // If no books left, reset selectedBookId to an empty string or any default value
-        setSelectedBookId('')
+
+    try {
+      // Delete the story from the backend database
+      await deleteStory(bookId)
+
+      // Update the state with the filtered array
+      setBook(updatedBooks)
+
+      // Check if the currently selected book is deleted
+      if (selectedBookId === bookId) {
+        // If deleted, set selectedBookId to the id of the first book in the updated array
+        if (updatedBooks.length > 0) {
+          setSelectedBookId(updatedBooks[0].id)
+        } else {
+          // If no books left, reset selectedBookId to an empty string or any default value
+          setSelectedBookId('')
+        }
       }
+    } catch (error) {
+      console.error('Error deleting story:', error)
+      // Optionally, handle error state/UI updates
     }
   }
 
@@ -612,7 +661,7 @@ export default function Home() {
                                               variant="outline"
                                               type="submit"
                                               onClick={() =>
-                                                deleteBook(item.id)
+                                                handleDeleteStory(item.id)
                                               }
                                             >
                                               Yes
@@ -656,7 +705,9 @@ export default function Home() {
               <div className="text-center sm:flex h-20 items-center  sm:justify-start  bg-gray-50/40 px-6 shadow-sm dark:bg-gray-800/40  pt-3 ">
                 <h1 className="text-3xl  font-semibold text-gray-600 dark:text-gray-50">
                   {books.find((item) => item.id === selectedBookId)?.title}
-                  {books.length === 0 ? 'Add a story title' : ''}
+                  {!isLoadingStories && books.length === 0
+                    ? 'Add a story title'
+                    : ''}
                 </h1>
                 {/* <div className="flex items-center gap-2">sdfsdfsdf</div> */}
               </div>
