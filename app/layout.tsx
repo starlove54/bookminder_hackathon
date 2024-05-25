@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Navbar from './Components/Navbar'
-import Footer from './Components/Footer'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import { Poppins } from 'next/font/google'
-import Header from './Components/Header'
+import Header from './components/Header'
 import {
   ClerkProvider,
   SignInButton,
