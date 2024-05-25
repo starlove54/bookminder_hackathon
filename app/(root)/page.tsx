@@ -293,7 +293,7 @@ export default function Home() {
         setNewBookTitle('')
 
         // Update selected book ID if none is selected
-        if (!selectedBookId) {
+        if (books.length === 0 || !selectedBookId) {
           setSelectedBookId(newBook.id)
         }
       } else {
