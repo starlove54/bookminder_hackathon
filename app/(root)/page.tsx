@@ -1,5 +1,5 @@
 'use client'
-import CharacterCard from '../Components/CharacterCard'
+import CharacterCard from '../components/CharacterCard'
 import { useCallback, useEffect, useState } from 'react'
 // import bookItems from '../bookItems.json'
 import { Input } from '@/components/ui/input'
